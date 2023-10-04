@@ -1,80 +1,62 @@
 import 'package:dash_run/game/dash_run_game.dart';
 import 'package:dash_run/gen/assets.gen.dart';
-import 'package:flame/cache.dart';
+
 import 'package:flame/components.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:leap/leap.dart';
 
-class Enemies extends PositionComponent with HasGameRef<DashRunGame> {
-  static const _width = 130.0;
-  static const _height = 25.0;
-  static final _images = Images(prefix: '');
-
+class Enemies extends Component with HasGameRef<DashRunGame> {
   @override
-  double get width => _width;
-
-  @override
-  double get height => _height;
-
-  Future<void> addAllToMap(LeapMap map) async {
-    final enemies = await Sprite.load(
+  Future<void> onLoad() async {
+    final enemiesLayer = gameRef.leapMap.getTileLayer<ObjectGroup>('enemies');
+    final enemyTiles = await gameRef.images.load(
       Assets.images.tileEnemiesV1.path,
-      images: _images,
     );
-    final enemiesLayer = map.getTileLayer<TileLayer>('Enemies');
-    final enemyTiles = _EnemyTile.generate(
-      map: map.tiledMap.tileMap.map,
-      layer: enemiesLayer,
-      sprite: enemies,
-    );
-    for (final enemyTile in enemyTiles) {
-      for (final column in enemyTile) {
-        if (column != null) {
-          map.add(column);
-        }
-      }
+
+    for (final object in enemiesLayer.objects) {
+      final spritesheet = SpriteSheet(
+        image: enemyTiles,
+        srcSize: Vector2.all(32),
+      );
+
+      gameRef.leapMap.add(
+        Enemy(
+          // We are sure we have a gid.
+          sprite: spritesheet.getSpriteById(object.gid!),
+          tiledObject: object,
+        ),
+      );
     }
+
+    return super.onLoad();
   }
 }
 
-class _EnemyTile extends PhysicalEntity {
-  _EnemyTile(
-    this.gridX,
-    this.gridY, {
-    required this.tile,
-    required this.spriteComponent,
-  }) : super(static: true, collisionType: CollisionType.standard);
+class Enemy extends PhysicalEntity<DashRunGame> {
+  Enemy({
+    required this.sprite,
+    required this.tiledObject,
+    super.static = true,
+    super.collisionType = CollisionType.standard,
+  });
 
-  final Tile tile;
-  final SpriteComponent spriteComponent;
-  final int gridX;
-  final int gridY;
+  late final Sprite sprite;
+  late final TiledObject tiledObject;
 
-  static List<List<_EnemyTile?>> generate({
-    required TiledMap map,
-    required TileLayer layer,
-    required Sprite sprite,
-  }) {
-    final enemyTiles = List.generate(
-      layer.width,
-      (_) => List<_EnemyTile?>.filled(layer.height, null),
+  @override
+  Future<void> onLoad() async {
+    size = sprite.srcSize;
+    anchor = Anchor.center;
+    position = Vector2(tiledObject.x, tiledObject.y);
+
+    add(
+      SpriteComponent(
+        size: size,
+        sprite: sprite,
+      ),
     );
 
-    for (var x = 0; x < layer.width; x++) {
-      for (var y = 0; y < layer.height; y++) {
-        final gid = layer.tileData![y][x].tile;
-        if (gid == 0) {
-          continue;
-        }
-        final tile = map.tileByGid(gid)!;
-        enemyTiles[x][y] = _EnemyTile(
-          x,
-          y,
-          tile: tile,
-          spriteComponent: SpriteComponent(sprite: sprite),
-        );
-      }
-    }
-    return enemyTiles;
+    return super.onLoad();
   }
 }
