@@ -1,0 +1,84 @@
+{
+  "layers": ["body", "pants", "shoes", "shirt", "hair"],
+  "animations": {
+    "idle": 18,
+    "run": 16,
+    "jump": 16,
+    "doubleJump": 16,
+    "deathPit": 24,
+    "deathFaint": 24,
+    "slide": 16
+  },
+  "poses": ["idle", "run", "jump", "celebrate"],
+  "render": {
+    "frame_size": 128,
+    "supersample": 2,
+    "pose_size": 512,
+    "pose_supersample": 2,
+    "pose_margin": 0.05,
+    "taa_samples": 16,
+    "filter_size": 1.0
+  },
+  "camera": {
+    "azimuth_deg": 30,
+    "elevation_deg": 9,
+    "standing_height_px": 114,
+    "baseline_px": 125.5,
+    "center_x_px": 64
+  },
+  "shading": {
+    "key_light": [0.35, -0.7, 0.65],
+    "fill_light": [-0.4, -0.6, 0.1],
+    "fill_strength": 0.35,
+    "ambient": 0.15,
+    "band": 0.36,
+    "band_softness": 0.06,
+    "shadow_multiplier": [0.52, 0.47, 0.55],
+    "highlight_band": 0.98,
+    "highlight_multiplier": 1.12
+  },
+  "outline": {
+    "thickness": 0.024,
+    "color": "#1C1412"
+  },
+  "variants": {
+    "body": {
+      "default": {
+        "mesh": "standard",
+        "colors": {"skin": "#C98B62", "eyes": "#1E1512", "mouth": "#7E3A2C"}
+      }
+    },
+    "hair": {
+      "default": {
+        "mesh": "short",
+        "colors": {"hair": "#3A2418"}
+      }
+    },
+    "shirt": {
+      "default": {
+        "mesh": "tshirt",
+        "colors": {"fabric": "#F85F00", "trim": "#C94A00"}
+      },
+      "azul": {
+        "mesh": "tshirt",
+        "colors": {"fabric": "#2F6FD6", "trim": "#1F4FA0"}
+      },
+      "regata": {
+        "mesh": "tank",
+        "colors": {"fabric": "#F85F00", "trim": "#C94A00"}
+      }
+    },
+    "pants": {
+      "default": {
+        "mesh": "jogger",
+        "colors": {"fabric": "#2B2B33", "cuff": "#1F1F26"}
+      }
+    },
+    "shoes": {
+      "default": {
+        "mesh": "sneaker",
+        "colors": {"upper": "#F2F2F2", "sole": "#4A4A54", "accent": "#F85F00"}
+      }
+    }
+  }
+}
