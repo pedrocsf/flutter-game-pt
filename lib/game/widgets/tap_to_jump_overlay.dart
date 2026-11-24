@@ -1,5 +1,6 @@
+import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:super_dash/l10n/l10n.dart';
+import 'package:moovz_dash/l10n/l10n.dart';
 
 class TapToJumpOverlay extends StatelessWidget {
   const TapToJumpOverlay({super.key});
@@ -14,18 +15,15 @@ class TapToJumpOverlay extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(
-              color: const Color.fromARGB(81, 177, 177, 177),
-            ),
-            color: const Color(0xE51B1B36),
+            border: Border.all(color: AppColors.border),
+            color: AppColors.surfaceDialog,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
               l10n.tapToStart,
-              style: textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-              ),
+              textAlign: TextAlign.center,
+              style: textTheme.titleLarge?.copyWith(color: Colors.white),
             ),
           ),
         ),
