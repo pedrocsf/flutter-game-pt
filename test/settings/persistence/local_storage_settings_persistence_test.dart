@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:moovz_dash/settings/persistence/persistence.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:super_dash/settings/persistence/persistence.dart';
 
 void main() {
   group('LocalStorageSettingsPersistence', () {
@@ -9,9 +9,7 @@ void main() {
     });
 
     test('getMusicOn', () async {
-      SharedPreferences.setMockInitialValues({
-        'musicOn': false,
-      });
+      SharedPreferences.setMockInitialValues({'musicOn': false});
 
       final persistence = LocalStorageSettingsPersistence();
       final value = await persistence.getMusicOn();
@@ -19,9 +17,7 @@ void main() {
     });
 
     test('getSoundsOn', () async {
-      SharedPreferences.setMockInitialValues({
-        'soundsOn': false,
-      });
+      SharedPreferences.setMockInitialValues({'soundsOn': false});
 
       final persistence = LocalStorageSettingsPersistence();
       final value = await persistence.getSoundsOn();
@@ -29,9 +25,7 @@ void main() {
     });
 
     test('getMuted', () async {
-      SharedPreferences.setMockInitialValues({
-        'mute': false,
-      });
+      SharedPreferences.setMockInitialValues({'mute': false});
 
       final persistence = LocalStorageSettingsPersistence();
       final value = await persistence.getMuted(defaultValue: false);
@@ -49,10 +43,7 @@ void main() {
 
       await persistence.saveMuted(active: true);
 
-      expect(
-        await persistence.getMuted(defaultValue: false),
-        isTrue,
-      );
+      expect(await persistence.getMuted(defaultValue: false), isTrue);
     });
 
     test('saveMusicOn', () async {
@@ -60,10 +51,7 @@ void main() {
 
       await persistence.saveMusicOn(active: true);
 
-      expect(
-        await persistence.getMusicOn(),
-        isTrue,
-      );
+      expect(await persistence.getMusicOn(), isTrue);
     });
 
     test('saveSoundsOn', () async {
@@ -71,10 +59,7 @@ void main() {
 
       await persistence.saveSoundsOn(active: true);
 
-      expect(
-        await persistence.getSoundsOn(),
-        isTrue,
-      );
+      expect(await persistence.getSoundsOn(), isTrue);
     });
   });
 }
