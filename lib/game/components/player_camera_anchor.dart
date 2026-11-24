@@ -1,7 +1,9 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
-import 'package:super_dash/game/super_dash_game.dart';
+import 'package:moovz_dash/game/moovz_dash_game.dart';
 
 class CameraBounds extends PositionComponent {
   CameraBounds({
@@ -18,6 +20,14 @@ class CameraBounds extends PositionComponent {
 
   double translateValue = 0;
   double translatedValue = 0;
+
+  void snapToReference() {
+    position
+      ..x = reference.position.x + referenceOffset.x
+      ..y = reference.position.y + referenceOffset.y;
+    translateValue = 0;
+    translatedValue = 0;
+  }
 
   void _updatePosition(double dt) {
     position.x = reference.position.x + referenceOffset.x;
@@ -50,10 +60,7 @@ class CameraBounds extends PositionComponent {
   void onMount() {
     super.onMount();
 
-    referenceOffset = Vector2(
-      reference.size.x,
-      reference.size.y,
-    );
+    referenceOffset = Vector2(reference.size.x, reference.size.y);
     position.y = reference.position.y + referenceOffset.y;
 
     _updatePosition(0);
@@ -62,42 +69,24 @@ class CameraBounds extends PositionComponent {
       const referenceLine = 150.0;
       add(
         RectangleComponent(
-          position: Vector2(
-            -referenceLine / 2,
-            -bound,
-          ),
-          size: Vector2(
-            referenceLine,
-            2,
-          ),
+          position: Vector2(-referenceLine / 2, -bound),
+          size: Vector2(referenceLine, 2),
           paint: Paint()..color = Colors.red,
         ),
       );
 
       add(
         RectangleComponent(
-          position: Vector2(
-            -referenceLine / 2,
-            0,
-          ),
-          size: Vector2(
-            referenceLine,
-            2,
-          ),
+          position: Vector2(-referenceLine / 2, 0),
+          size: Vector2(referenceLine, 2),
           paint: Paint()..color = Colors.green,
         ),
       );
 
       add(
         RectangleComponent(
-          position: Vector2(
-            -referenceLine / 2,
-            bound,
-          ),
-          size: Vector2(
-            referenceLine,
-            2,
-          ),
+          position: Vector2(-referenceLine / 2, bound),
+          size: Vector2(referenceLine, 2),
           paint: Paint()..color = Colors.red,
         ),
       );
@@ -113,7 +102,7 @@ class CameraBounds extends PositionComponent {
 }
 
 class PlayerCameraAnchor extends Component
-    with ParentIsA<PositionComponent>, HasGameRef<SuperDashGame>
+    with ParentIsA<PositionComponent>, HasGameRef<MoovzDashGame>
     implements ReadOnlyPositionProvider {
   PlayerCameraAnchor({
     required this.levelSize,
@@ -121,32 +110,38 @@ class PlayerCameraAnchor extends Component
     this.showCameraBounds = false,
   });
 
-  final Vector2 levelSize;
+  Vector2 levelSize;
   final Vector2 cameraViewport;
   final Vector2 _anchor = Vector2.zero();
-  late final PositionComponent _bounds;
+  late final CameraBounds _bounds;
   final bool showCameraBounds;
 
-  late final Vector2 _cameraMin = Vector2(
-    cameraViewport.x * .4,
-    cameraViewport.y / 2,
+  static const _playerScreenXRatio = 0.3;
+  static const _playerScreenYRatio = 0.65;
+
+  Vector2 get _cameraMin => cameraViewport / 2;
+
+  Vector2 get _cameraMax => Vector2(
+    max(levelSize.x - cameraViewport.x / 2, cameraViewport.x / 2),
+    max(levelSize.y - cameraViewport.y / 2, cameraViewport.y / 2),
   );
 
-  late final Vector2 _cameraMax = Vector2(
-    levelSize.x - cameraViewport.x / 2,
-    levelSize.y - cameraViewport.y / 2,
-  );
-
-  late final _cameraXOffset = cameraViewport.x * .3;
-  late final _cameraYOffset = cameraViewport.y * .2;
+  double get _cameraXOffset => cameraViewport.x * (0.5 - _playerScreenXRatio);
+  double get _cameraYOffset => cameraViewport.y * (_playerScreenYRatio - 0.5);
 
   @override
   Vector2 get position => _anchor;
 
   void _setAnchor(double x, double y) {
     _anchor
-      ..x = x.clamp(_cameraMin.x, _cameraMax.x) + _cameraXOffset
-      ..y = y.clamp(_cameraMin.y, _cameraMax.y) - _cameraYOffset;
+      ..x = (x + _cameraXOffset).clamp(_cameraMin.x, _cameraMax.x)
+      ..y = (y - _cameraYOffset).clamp(_cameraMin.y, _cameraMax.y);
+  }
+
+  void snapToPlayer({required Vector2 levelSize}) {
+    this.levelSize = levelSize;
+    _bounds.snapToReference();
+    _setAnchor(_bounds.position.x, _bounds.position.y);
   }
 
   @override
@@ -168,9 +163,6 @@ class PlayerCameraAnchor extends Component
   void update(double dt) {
     super.update(dt);
 
-    _setAnchor(
-      _bounds.position.x,
-      _bounds.position.y,
-    );
+    _setAnchor(_bounds.position.x, _bounds.position.y);
   }
 }

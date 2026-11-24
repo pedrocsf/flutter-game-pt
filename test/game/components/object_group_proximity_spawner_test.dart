@@ -8,8 +8,8 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leap/leap.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:super_dash/audio/audio.dart';
-import 'package:super_dash/game/game.dart';
+import 'package:moovz_dash/audio/audio.dart';
+import 'package:moovz_dash/game/game.dart';
 
 class _MockImage extends Mock implements Image {}
 
@@ -26,12 +26,9 @@ class _MockLeapMap extends Mock implements LeapMap {}
 
 class _MockObjectGroup extends Mock implements ObjectGroup {}
 
-class _TestSuperDashGame extends SuperDashGame {
-  _TestSuperDashGame({this.layerObjects = const []})
-      : super(
-          gameBloc: _MockGameBloc(),
-          audioController: _MockAudioController(),
-        );
+class _TestMoovzDashGame extends MoovzDashGame {
+  _TestMoovzDashGame({this.layerObjects = const []})
+    : super(gameBloc: _MockGameBloc(), audioController: _MockAudioController());
 
   final List<TiledObject> layerObjects;
 
@@ -83,51 +80,38 @@ void main() {
       registerFallbackValue(Component());
     });
 
-    final objects = [
-      TiledObject(
-        id: 1,
-        x: 400,
-      ),
-      TiledObject(
-        id: 2,
-        x: 800,
-      ),
-    ];
-    testWithGame(
-      'can be added to a game',
-      _TestSuperDashGame.new,
-      (game) async {
-        final reference = _ReferenceComponent();
-        await game.world.ensureAdd(reference);
+    final objects = [TiledObject(id: 1, x: 400), TiledObject(id: 2, x: 800)];
+    testWithGame('can be added to a game', _TestMoovzDashGame.new, (
+      game,
+    ) async {
+      final reference = _ReferenceComponent();
+      await game.world.ensureAdd(reference);
 
-        await game.ensureAdd(
-          ObjectGroupProximityBuilder<_ReferenceComponent>(
-            proximity: 200,
-            tileLayerName: '',
-            tileset: _MockTileset(),
-            componentBuilder: ({
-              required TiledObject tiledObject,
-            }) =>
-                PositionComponent(),
-          ),
-        );
-      },
-    );
+      await game.ensureAdd(
+        ObjectGroupProximityBuilder<_ReferenceComponent>(
+          proximity: 200,
+          tileLayerName: '',
+          tileset: _MockTileset(),
+          componentBuilder: ({required TiledObject tiledObject}) =>
+              PositionComponent(),
+        ),
+      );
+    });
 
     testWithGame(
       'spawn an object when the reference is far enough',
-      () => _TestSuperDashGame(layerObjects: objects),
+      () => _TestMoovzDashGame(layerObjects: objects),
       (game) async {
         final reference = _ReferenceComponent();
         await game.world.ensureAdd(reference);
 
         final proximityBuilder =
             ObjectGroupProximityBuilder<_ReferenceComponent>(
-          proximity: 200,
-          tileLayerName: '',
-          tileset: _MockTileset(),
-          componentBuilder: _SpawnedComponent.new,
-        );
+              proximity: 200,
+              tileLayerName: '',
+              tileset: _MockTileset(),
+              componentBuilder: _SpawnedComponent.new,
+            );
         await game.ensureAdd(proximityBuilder);
 
         reference.x = 201;
@@ -142,18 +126,18 @@ void main() {
 
     testWithGame(
       "doesn't spanw the component again",
-      () => _TestSuperDashGame(layerObjects: objects),
+      () => _TestMoovzDashGame(layerObjects: objects),
       (game) async {
         final reference = _ReferenceComponent();
         await game.world.ensureAdd(reference);
 
         final proximityBuilder =
             ObjectGroupProximityBuilder<_ReferenceComponent>(
-          proximity: 200,
-          tileLayerName: '',
-          tileset: _MockTileset(),
-          componentBuilder: _SpawnedComponent.new,
-        );
+              proximity: 200,
+              tileLayerName: '',
+              tileset: _MockTileset(),
+              componentBuilder: _SpawnedComponent.new,
+            );
         await game.ensureAdd(proximityBuilder);
 
         reference.x = 201;

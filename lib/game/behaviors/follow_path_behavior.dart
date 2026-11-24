@@ -37,10 +37,7 @@ class FollowPathBehavior extends Behavior<PhysicalEntity> {
 
       if (nextStep != step) {
         effects.add(
-          stepPosition.toMoveEffect(
-            tileSize: tileSize,
-            baseSpeed: speed,
-          ),
+          stepPosition.toMoveEffect(tileSize: tileSize, baseSpeed: speed),
         );
         vectorers.add(stepPosition);
         stepPosition = Vector2.zero();
@@ -52,20 +49,12 @@ class FollowPathBehavior extends Behavior<PhysicalEntity> {
 
     if (stepPosition.x != 0 || stepPosition.y != 0) {
       effects.add(
-        stepPosition.toMoveEffect(
-          tileSize: tileSize,
-          baseSpeed: speed,
-        ),
+        stepPosition.toMoveEffect(tileSize: tileSize, baseSpeed: speed),
       );
       vectorers.add(stepPosition);
     }
 
-    parent.add(
-      SequenceEffect(
-        effects,
-        infinite: pathExpression.path.infinite,
-      ),
-    );
+    parent.add(SequenceEffect(effects, infinite: pathExpression.path.infinite));
   }
 
   @override
@@ -87,7 +76,8 @@ class FollowPathBehavior extends Behavior<PhysicalEntity> {
   }
 
   void _flipParentSprite() {
-    final sprite = parent.firstChild<SpriteComponent>() ??
+    final sprite =
+        parent.firstChild<SpriteComponent>() ??
         parent.firstChild<SpriteAnimationComponent>();
 
     if (sprite != null) {
@@ -102,12 +92,7 @@ extension on Vector2 {
     required double baseSpeed,
   }) {
     final totalSpeed = length / tileSize * baseSpeed;
-    return MoveEffect.by(
-      this,
-      LinearEffectController(
-        totalSpeed,
-      ),
-    );
+    return MoveEffect.by(this, LinearEffectController(totalSpeed));
   }
 }
 

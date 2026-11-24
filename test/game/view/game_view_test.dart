@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:super_dash/game/game.dart';
-import 'package:super_dash/l10n/l10n.dart';
-import 'package:super_dash/settings/settings.dart';
+import 'package:moovz_dash/game/game.dart';
+import 'package:moovz_dash/l10n/l10n.dart';
+import 'package:moovz_dash/settings/settings.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -30,10 +30,7 @@ void main() {
     });
 
     testWidgets('renders GameView', (tester) async {
-      await tester.pumpApp(
-        Game(),
-        settingsController: settingsController,
-      );
+      await tester.pumpApp(Game(), settingsController: settingsController);
 
       expect(find.byType(GameView), findsOneWidget);
     });
@@ -45,10 +42,7 @@ void main() {
     setUp(() => gameBloc = _MockGameBloc());
 
     Widget buildSubject() {
-      return BlocProvider.value(
-        value: gameBloc,
-        child: const GameView(),
-      );
+      return BlocProvider.value(value: gameBloc, child: const GameView());
     }
 
     testWidgets('renders score', (tester) async {
@@ -62,11 +56,21 @@ void main() {
       final context = tester.element(find.byType(ScoreLabel));
 
       expect(
-        find.text(
-          context.l10n.gameScoreLabel(gameBloc.state.score),
-        ),
+        find.text(context.l10n.gameScoreLabel(gameBloc.state.score)),
         findsOneWidget,
       );
+    });
+
+    testWidgets('renders lives and the special item popup', (tester) async {
+      when(() => gameBloc.state).thenReturn(GameState.initial());
+
+      await tester.pumpApp(
+        buildSubject(),
+        settingsController: settingsController,
+      );
+
+      expect(find.byType(LivesLabel), findsOneWidget);
+      expect(find.byType(SpecialItemPopup), findsOneWidget);
     });
   });
 }

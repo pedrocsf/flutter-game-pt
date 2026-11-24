@@ -3,16 +3,16 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:moovz_dash/game/game.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
-import 'package:super_dash/game/game.dart';
 
-typedef ObjectGroupProximitySpawner = PositionComponent Function({
-  required TiledObject tiledObject,
-});
+typedef ObjectGroupProximitySpawner =
+    PositionComponent Function({required TiledObject tiledObject});
 
 class ObjectGroupProximityBuilder<Reference extends PositionComponent>
-    extends Component with HasGameRef<SuperDashGame> {
+    extends Component
+    with HasGameRef<MoovzDashGame> {
   ObjectGroupProximityBuilder({
     required this.proximity,
     required this.tileLayerName,
@@ -27,8 +27,8 @@ class ObjectGroupProximityBuilder<Reference extends PositionComponent>
 
   late final Image tiles;
 
-  final _objects = OrderedSet<TiledObject>(
-    Comparing.on((object) => object.x),
+  final _objects = OrderedSet.comparing<TiledObject>(
+    compare: Comparing.on((object) => object.x),
   );
 
   final Map<int, PositionComponent> _spawnedComponents = {};
@@ -78,8 +78,8 @@ class ObjectGroupProximityBuilder<Reference extends PositionComponent>
     _referenceDirection = reference.x > _lastReferenceX
         ? 1
         : reference.x < _lastReferenceX
-            ? -1
-            : 0;
+        ? -1
+        : 0;
 
     _lastReferenceX = reference.x;
 
@@ -95,9 +95,11 @@ class ObjectGroupProximityBuilder<Reference extends PositionComponent>
         }
       }
 
-      for (var i = _referenceIndex;
-          i >= 0 && i < _objects.length;
-          i += _referenceDirection) {
+      for (
+        var i = _referenceIndex;
+        i >= 0 && i < _objects.length;
+        i += _referenceDirection
+      ) {
         final object = _objects.elementAt(i);
         if ((object.x - reference.x).abs() > proximity) {
           break;
@@ -107,9 +109,7 @@ class ObjectGroupProximityBuilder<Reference extends PositionComponent>
           continue;
         }
 
-        final component = componentBuilder(
-          tiledObject: object,
-        );
+        final component = componentBuilder(tiledObject: object);
 
         _spawnedComponents[object.id] = component;
         gameRef.leapMap.add(component);
