@@ -1,66 +1,117 @@
 import 'package:app_ui/app_ui.dart';
-import 'package:flame/cache.dart';
-import 'package:flame/image_composition.dart';
-import 'package:flame/widgets.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
-import 'package:super_dash/game/game.dart';
-import 'package:super_dash/gen/assets.gen.dart';
-import 'package:super_dash/l10n/l10n.dart';
-import 'package:super_dash/leaderboard/bloc/leaderboard_bloc.dart';
-import 'package:super_dash/score/score.dart';
+import 'package:moovz_dash/game/game.dart';
+import 'package:moovz_dash/gen/assets.gen.dart';
+import 'package:moovz_dash/l10n/l10n.dart';
+import 'package:moovz_dash/leaderboard/bloc/leaderboard_bloc.dart';
+import 'package:moovz_dash/score/score.dart';
+
+const _statusAvatarSize = 64.0;
+const _pagePadding = 12.0;
+const _gap = 8.0;
+const _logoWidth = 120.0;
 
 enum LeaderboardStep { gameIntro, gameScore }
 
 class LeaderboardPage extends StatelessWidget {
   const LeaderboardPage({
     this.step = LeaderboardStep.gameIntro,
+    this.initialDifficulty = GameDifficulty.medium,
     super.key,
   });
 
-  static Page<void> page([
+  static Page<void> page({
     LeaderboardStep step = LeaderboardStep.gameScore,
-  ]) {
+    GameDifficulty initialDifficulty = GameDifficulty.medium,
+  }) {
     return MaterialPage(
-      child: LeaderboardPage(step: step),
+      child: LeaderboardPage(step: step, initialDifficulty: initialDifficulty),
     );
   }
 
-  static PageRoute<void> route([
+  static PageRoute<void> route({
     LeaderboardStep step = LeaderboardStep.gameIntro,
-  ]) {
+    GameDifficulty initialDifficulty = GameDifficulty.medium,
+  }) {
     return PageRouteBuilder(
-      pageBuilder: (_, __, ___) => LeaderboardPage(step: step),
+      pageBuilder: (_, __, ___) =>
+          LeaderboardPage(step: step, initialDifficulty: initialDifficulty),
     );
   }
 
   final LeaderboardStep step;
+  final GameDifficulty initialDifficulty;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => LeaderboardBloc(
         leaderboardRepository: context.read<LeaderboardRepository>(),
-      )..add(const LeaderboardTop10Requested()),
-      child: LeaderboardView(step: step),
+      )..add(LeaderboardTop10Requested(difficulty: initialDifficulty)),
+      child: LeaderboardView(step: step, initialDifficulty: initialDifficulty),
     );
   }
 }
 
-class LeaderboardView extends StatelessWidget {
+class LeaderboardView extends StatefulWidget {
   const LeaderboardView({
     required this.step,
+    this.initialDifficulty = GameDifficulty.medium,
     super.key,
   });
 
   final LeaderboardStep step;
+  final GameDifficulty initialDifficulty;
+
+  @override
+  State<LeaderboardView> createState() => _LeaderboardViewState();
+}
+
+class _LeaderboardViewState extends State<LeaderboardView>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: GameDifficulty.values.length,
+      vsync: this,
+      initialIndex: widget.initialDifficulty.index,
+    )..addListener(_onTabChanged);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _onTabChanged() {
+    if (_tabController.indexIsChanging) return;
+    context.read<LeaderboardBloc>().add(
+      LeaderboardTop10Requested(
+        difficulty: GameDifficulty.values[_tabController.index],
+      ),
+    );
+  }
+
+  String _difficultyLabel(AppLocalizations l10n, GameDifficulty difficulty) {
+    return switch (difficulty) {
+      GameDifficulty.easy => l10n.difficultyEasy,
+      GameDifficulty.medium => l10n.difficultyMedium,
+      GameDifficulty.hard => l10n.difficultyHard,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final step = widget.step;
     return PageWithBackground(
       background: const GameBackground(),
       child: DecoratedBox(
@@ -70,37 +121,57 @@ class LeaderboardView extends StatelessWidget {
             fit: BoxFit.fill,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: MediaQuery.sizeOf(context).height * .15,
-            ),
-            const Leaderboard(),
-            const SizedBox(height: 20),
-            Align(
-              child: switch (step) {
-                LeaderboardStep.gameIntro => GameElevatedButton(
-                    label: l10n.leaderboardPageGoBackButton,
-                    onPressed: Navigator.of(context).pop,
-                    gradient: const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0xFFA6C3DF),
-                        Color(0xFF79AACA),
-                      ],
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: _pagePadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const MoovzLogo(width: _logoWidth),
+                    const SizedBox(width: _pagePadding),
+                    SizedBox(
+                      width: Leaderboard.width,
+                      child: TabBar(
+                        controller: _tabController,
+                        indicatorColor: AppColors.primary,
+                        labelColor: AppColors.primary,
+                        unselectedLabelColor: AppColors.onSurfaceMuted,
+                        dividerColor: Colors.transparent,
+                        tabs: [
+                          for (final difficulty in GameDifficulty.values)
+                            Tab(text: _difficultyLabel(l10n, difficulty)),
+                        ],
+                      ),
                     ),
-                  ),
-                LeaderboardStep.gameScore => GameElevatedButton.icon(
-                    label: l10n.playAgain,
-                    icon: const Icon(Icons.refresh, size: 16),
-                    onPressed: context.flow<ScoreState>().complete,
-                  ),
-              },
+                  ],
+                ),
+                const SizedBox(height: _gap),
+                const Expanded(child: Center(child: Leaderboard())),
+                const SizedBox(height: _gap),
+                Align(
+                  child: switch (step) {
+                    LeaderboardStep.gameIntro => GameElevatedButton(
+                      label: l10n.leaderboardPageGoBackButton,
+                      onPressed: Navigator.of(context).pop,
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [AppColors.surface, AppColors.background],
+                      ),
+                    ),
+                    LeaderboardStep.gameScore => GameElevatedButton.icon(
+                      label: l10n.playAgain,
+                      icon: const Icon(Icons.refresh, size: 16),
+                      onPressed: context.flow<ScoreState>().complete,
+                    ),
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -110,34 +181,32 @@ class LeaderboardView extends StatelessWidget {
 class Leaderboard extends StatelessWidget {
   const Leaderboard({super.key});
 
-  static const width = 360.0;
-  static const height = 420.0;
+  static const width = 460.0;
+  static const fadeHeight = 60.0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height,
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF4E4F65),
-            Color(0xFF1B1B36),
-          ],
+          colors: [AppColors.surface, AppColors.background],
         ),
       ),
       child: BlocBuilder<LeaderboardBloc, LeaderboardState>(
         builder: (context, state) => switch (state) {
           LeaderboardInitial() => const SizedBox.shrink(),
-          LeaderboardLoading() =>
-            const Center(child: LeaderboardLoadingWidget()),
+          LeaderboardLoading() => const Center(
+            child: LeaderboardLoadingWidget(),
+          ),
           LeaderboardError() => const Center(child: LeaderboardErrorWidget()),
-          LeaderboardLoaded(entries: final entries) =>
-            LeaderboardContent(entries: entries),
+          LeaderboardLoaded(entries: final entries) => LeaderboardContent(
+            entries: entries,
+          ),
         },
       ),
     );
@@ -153,19 +222,9 @@ class LeaderboardErrorWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox.square(
-          dimension: 64,
-          child: SpriteAnimationWidget.asset(
-            images: Images(prefix: ''),
-            path: Assets.map.anim.spritesheetDashDeathFaintPng.path,
-            data: SpriteAnimationData.sequenced(
-              amount: 16,
-              stepTime: 0.042,
-              textureSize: Vector2.all(64), // Game's tile size.
-              amountPerRow: 8,
-              loop: false,
-            ),
-          ),
+        const AvatarAnimationWidget(
+          animation: AvatarAnimation.deathFaint,
+          size: _statusAvatarSize,
         ),
         const SizedBox(height: 24),
         Text(context.l10n.leaderboardPageLeaderboardErrorText),
@@ -180,28 +239,16 @@ class LeaderboardLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: 64,
-      child: SpriteAnimationWidget.asset(
-        images: Images(prefix: ''),
-        path: Assets.map.anim.spritesheetDashRunPng.path,
-        data: SpriteAnimationData.sequenced(
-          amount: 16,
-          stepTime: 0.042,
-          textureSize: Vector2.all(64), // Game's tile size.
-          amountPerRow: 8,
-        ),
-      ),
+    return const AvatarAnimationWidget(
+      animation: AvatarAnimation.run,
+      size: _statusAvatarSize,
     );
   }
 }
 
 @visibleForTesting
 class LeaderboardContent extends StatelessWidget {
-  const LeaderboardContent({
-    required this.entries,
-    super.key,
-  });
+  const LeaderboardContent({required this.entries, super.key});
 
   final List<LeaderboardEntryData> entries;
 
@@ -212,9 +259,8 @@ class LeaderboardContent extends StatelessWidget {
     return Stack(
       children: [
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(12),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 l10n.leaderboardPageLeaderboardHeadline,
@@ -222,14 +268,15 @@ class LeaderboardContent extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 8),
               if (entries.isEmpty)
-                Center(child: Text(l10n.leaderboardPageLeaderboardNoEntries))
+                Expanded(
+                  child: Center(
+                    child: Text(l10n.leaderboardPageLeaderboardNoEntries),
+                  ),
+                )
               else
-                Flexible(
-                  child: _LeaderboardEntries(entries: entries),
-                ),
-              const SizedBox(height: 30),
+                Expanded(child: _LeaderboardEntries(entries: entries)),
             ],
           ),
         ),
@@ -239,17 +286,14 @@ class LeaderboardContent extends StatelessWidget {
           bottom: 0,
           child: Container(
             width: Leaderboard.width,
-            height: Leaderboard.height * .2,
+            height: Leaderboard.fadeHeight,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               gradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 stops: [0.0, 0.8],
-                colors: [
-                  Colors.transparent,
-                  Color(0xFF1B1B36),
-                ],
+                colors: [Colors.transparent, AppColors.background],
               ),
             ),
           ),
@@ -271,7 +315,8 @@ class _LeaderboardEntries extends StatelessWidget {
     final textTheme = theme.textTheme;
     return ListView.separated(
       padding: EdgeInsets.zero,
-      separatorBuilder: (context, index) => const Divider(color: Colors.grey),
+      separatorBuilder: (context, index) =>
+          const Divider(color: AppColors.border),
       itemCount: entries.length,
       itemBuilder: (context, index) {
         final entry = entries.elementAt(index);
@@ -280,12 +325,12 @@ class _LeaderboardEntries extends StatelessWidget {
           minVerticalPadding: 0,
           contentPadding: EdgeInsets.zero,
           leading: Text('#${index + 1}'),
-          title: Text(entry.playerInitials),
+          title: Text(entry.playerNickname),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if ([0, 1, 2].contains(index)) ...[
-                Icon(
+                FaIcon(
                   FontAwesomeIcons.trophy,
                   size: 20,
                   color: switch (index) {

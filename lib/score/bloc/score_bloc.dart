@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
+import 'package:moovz_dash/game/game.dart';
+import 'package:moovz_dash/score/input_nickname/nickname_rules.dart';
 
 part 'score_event.dart';
 part 'score_state.dart';
@@ -9,105 +11,92 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   ScoreBloc({
     required this.score,
     required LeaderboardRepository leaderboardRepository,
-  })  : _leaderboardRepository = leaderboardRepository,
-        super(const ScoreState()) {
+    this.difficulty = GameDifficulty.medium,
+  }) : _leaderboardRepository = leaderboardRepository,
+       super(ScoreState(difficulty: difficulty)) {
     on<ScoreSubmitted>(_onScoreSubmitted);
-    on<ScoreInitialsUpdated>(_onScoreInitialsUpdated);
-    on<ScoreInitialsSubmitted>(_onScoreInitialsSubmitted);
+    on<ScoreNicknameUpdated>(_onScoreNicknameUpdated);
+    on<ScoreNicknameSubmitted>(_onScoreNicknameSubmitted);
     on<ScoreLeaderboardRequested>(_onScoreLeaderboardRequested);
   }
 
   final int score;
+  final GameDifficulty difficulty;
   final LeaderboardRepository _leaderboardRepository;
 
-  final initialsRegex = RegExp('[A-Z]{3}');
+  void _onScoreSubmitted(ScoreSubmitted event, Emitter<ScoreState> emit) {
+    emit(state.copyWith(status: ScoreStatus.inputNickname));
+  }
 
-  void _onScoreSubmitted(
-    ScoreSubmitted event,
+  void _onScoreNicknameUpdated(
+    ScoreNicknameUpdated event,
     Emitter<ScoreState> emit,
   ) {
+    final nicknameStatus =
+        (state.nicknameStatus == NicknameFormStatus.blacklisted ||
+            state.nicknameStatus == NicknameFormStatus.invalid)
+        ? NicknameFormStatus.initial
+        : state.nicknameStatus;
     emit(
-      state.copyWith(
-        status: ScoreStatus.inputInitials,
-      ),
+      state.copyWith(nickname: event.nickname, nicknameStatus: nicknameStatus),
     );
   }
 
-  void _onScoreInitialsUpdated(
-    ScoreInitialsUpdated event,
-    Emitter<ScoreState> emit,
-  ) {
-    final initials = [...state.initials];
-    initials[event.index] = event.character;
-    final initialsStatus =
-        (state.initialsStatus == InitialsFormStatus.blacklisted)
-            ? InitialsFormStatus.initial
-            : state.initialsStatus;
-    emit(state.copyWith(initials: initials, initialsStatus: initialsStatus));
-  }
-
-  Future<void> _onScoreInitialsSubmitted(
-    ScoreInitialsSubmitted event,
+  Future<void> _onScoreNicknameSubmitted(
+    ScoreNicknameSubmitted event,
     Emitter<ScoreState> emit,
   ) async {
-    if (!_hasValidPattern()) {
-      emit(state.copyWith(initialsStatus: InitialsFormStatus.invalid));
-    } else if (_isInitialsBlacklisted()) {
-      emit(state.copyWith(initialsStatus: InitialsFormStatus.blacklisted));
+    if (!_hasValidNickname()) {
+      emit(state.copyWith(nicknameStatus: NicknameFormStatus.invalid));
+    } else if (_isNicknameBlacklisted()) {
+      emit(state.copyWith(nicknameStatus: NicknameFormStatus.blacklisted));
     } else {
-      emit(state.copyWith(initialsStatus: InitialsFormStatus.loading));
+      emit(state.copyWith(nicknameStatus: NicknameFormStatus.loading));
       try {
         await _leaderboardRepository.addLeaderboardEntry(
-          LeaderboardEntryData(
-            playerInitials: state.initials.join(),
-            score: score,
-          ),
+          LeaderboardEntryData(playerNickname: state.nickname, score: score),
+          difficultyKey: difficulty.storageKey,
         );
 
         emit(state.copyWith(status: ScoreStatus.scoreOverview));
       } catch (e, s) {
         addError(e, s);
-        emit(state.copyWith(initialsStatus: InitialsFormStatus.failure));
+        emit(state.copyWith(nicknameStatus: NicknameFormStatus.failure));
       }
     }
   }
 
-  bool _hasValidPattern() {
-    final value = state.initials;
-    return value.isNotEmpty && initialsRegex.hasMatch(value.join());
+  bool _hasValidNickname() {
+    return nicknameRegex.hasMatch(state.nickname);
   }
 
-  bool _isInitialsBlacklisted() {
-    return _blacklist.contains(state.initials.join());
+  bool _isNicknameBlacklisted() {
+    return _blacklist.contains(state.nickname.toLowerCase());
   }
 
   void _onScoreLeaderboardRequested(
     ScoreLeaderboardRequested event,
     Emitter<ScoreState> emit,
   ) {
-    emit(
-      state.copyWith(
-        status: ScoreStatus.leaderboard,
-      ),
-    );
+    emit(state.copyWith(status: ScoreStatus.leaderboard));
   }
 }
 
 const _blacklist = [
-  'FUK',
-  'FUC',
-  'COK',
-  'DIK',
-  'KKK',
-  'SHT',
-  'CNT',
-  'ASS',
-  'CUM',
-  'FAG',
-  'GAY',
-  'GOD',
-  'JEW',
-  'SEX',
-  'TIT',
-  'WTF',
+  'fuk',
+  'fuc',
+  'cok',
+  'dik',
+  'kkk',
+  'sht',
+  'cnt',
+  'ass',
+  'cum',
+  'fag',
+  'gay',
+  'god',
+  'jew',
+  'sex',
+  'tit',
+  'wtf',
 ];

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:super_dash/leaderboard/leaderboard.dart';
-import 'package:super_dash/score/game_over/game_over.dart';
-import 'package:super_dash/score/score.dart';
+import 'package:moovz_dash/leaderboard/leaderboard.dart';
+import 'package:moovz_dash/score/game_over/game_over.dart';
+import 'package:moovz_dash/score/score.dart';
 
 List<Page<void>> onGenerateScorePages(
   ScoreState state,
@@ -9,8 +9,10 @@ List<Page<void>> onGenerateScorePages(
 ) {
   return switch (state.status) {
     ScoreStatus.gameOver => [GameOverPage.page()],
-    ScoreStatus.inputInitials => [InputInitialsPage.page()],
+    ScoreStatus.inputNickname => [InputNicknamePage.page()],
     ScoreStatus.scoreOverview => [ScoreOverviewPage.page()],
-    ScoreStatus.leaderboard => [LeaderboardPage.page()],
+    ScoreStatus.leaderboard => [
+      LeaderboardPage.page(initialDifficulty: state.difficulty),
+    ],
   };
 }

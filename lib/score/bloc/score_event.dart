@@ -11,16 +11,14 @@ final class ScoreSubmitted extends ScoreEvent {
   const ScoreSubmitted();
 }
 
-final class ScoreInitialsUpdated extends ScoreEvent {
-  const ScoreInitialsUpdated({required this.character, required this.index});
+final class ScoreNicknameUpdated extends ScoreEvent {
+  const ScoreNicknameUpdated({required this.nickname});
 
-  final String character;
-
-  final int index;
+  final String nickname;
 }
 
-final class ScoreInitialsSubmitted extends ScoreEvent {
-  const ScoreInitialsSubmitted();
+final class ScoreNicknameSubmitted extends ScoreEvent {
+  const ScoreNicknameSubmitted();
 }
 
 final class ScoreLeaderboardRequested extends ScoreEvent {

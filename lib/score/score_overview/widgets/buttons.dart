@@ -3,17 +3,16 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:super_dash/l10n/l10n.dart';
-import 'package:super_dash/score/score.dart';
-import 'package:super_dash/share/share.dart';
+import 'package:moovz_dash/l10n/l10n.dart';
+import 'package:moovz_dash/score/score.dart';
+import 'package:moovz_dash/share/share.dart';
+
+const _spacing = 12.0;
 
 const _gradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
-  colors: [
-    Color(0x60D0F7FB),
-    Color(0x6005B5CB),
-  ],
+  colors: [AppColors.surface, AppColors.background],
 );
 
 class WebButtons extends StatelessWidget {
@@ -25,12 +24,12 @@ class WebButtons extends StatelessWidget {
     return Column(
       children: [
         Text(l10n.shareOn),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             _ShareButton(
-              icon: const Icon(
+              icon: const FaIcon(
                 FontAwesomeIcons.xTwitter,
                 size: 20,
                 color: Colors.white,
@@ -42,7 +41,7 @@ class WebButtons extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             _ShareButton(
-              icon: const Icon(
+              icon: const FaIcon(
                 FontAwesomeIcons.facebook,
                 size: 30,
                 color: Colors.white,
@@ -54,9 +53,9 @@ class WebButtons extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: _spacing),
         const _SeeTheRankingButton(),
-        const SizedBox(height: 24),
+        const SizedBox(height: _spacing),
         const _PlayAgainButton(),
       ],
     );
@@ -69,13 +68,13 @@ class MobileButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Column(
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: _spacing,
+      runSpacing: _spacing,
       children: [
         GameElevatedButton.icon(
-          icon: const Icon(
-            Icons.share,
-            size: 16,
-          ),
+          icon: const Icon(Icons.share, size: 16),
           label: l10n.share,
           gradient: _gradient,
           onPressed: () {
@@ -83,9 +82,7 @@ class MobileButtons extends StatelessWidget {
             context.read<ShareController>().shareMobile(score);
           },
         ),
-        const SizedBox(height: 24),
         const _PlayAgainButton(),
-        const SizedBox(height: 24),
         const _SeeTheRankingButton(),
       ],
     );
@@ -93,10 +90,7 @@ class MobileButtons extends StatelessWidget {
 }
 
 class _ShareButton extends StatelessWidget {
-  const _ShareButton({
-    required this.icon,
-    required this.onPressed,
-  });
+  const _ShareButton({required this.icon, required this.onPressed});
 
   final Icon icon;
 
@@ -110,14 +104,10 @@ class _ShareButton extends StatelessWidget {
       width: 52,
       decoration: BoxDecoration(
         gradient: _gradient,
-        border: Border.all(color: Colors.white24),
+        border: Border.all(color: AppColors.border),
         borderRadius: borderRadius,
       ),
-      child: InkWell(
-        borderRadius: borderRadius,
-        onTap: onPressed,
-        child: icon,
-      ),
+      child: InkWell(borderRadius: borderRadius, onTap: onPressed, child: icon),
     );
   }
 }

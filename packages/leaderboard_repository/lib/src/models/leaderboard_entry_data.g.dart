@@ -7,15 +7,15 @@ part of 'leaderboard_entry_data.dart';
 // **************************************************************************
 
 LeaderboardEntryData _$LeaderboardEntryDataFromJson(
-        Map<String, dynamic> json) =>
-    LeaderboardEntryData(
-      playerInitials: json['playerInitials'] as String,
-      score: json['score'] as int,
-    );
+  Map<String, dynamic> json,
+) => LeaderboardEntryData(
+  playerNickname: json['playerNickname'] as String,
+  score: (json['score'] as num).toInt(),
+);
 
 Map<String, dynamic> _$LeaderboardEntryDataToJson(
-        LeaderboardEntryData instance) =>
-    <String, dynamic>{
-      'playerInitials': instance.playerInitials,
-      'score': instance.score,
-    };
+  LeaderboardEntryData instance,
+) => <String, dynamic>{
+  'playerNickname': instance.playerNickname,
+  'score': instance.score,
+};

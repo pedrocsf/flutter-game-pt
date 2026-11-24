@@ -3,20 +3,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:super_dash/game/game.dart';
-import 'package:super_dash/game_intro/game_intro.dart';
-import 'package:super_dash/gen/assets.gen.dart';
-import 'package:super_dash/l10n/l10n.dart';
-import 'package:super_dash/score/score.dart';
-import 'package:super_dash/utils/utils.dart';
+import 'package:moovz_dash/game/game.dart';
+import 'package:moovz_dash/gen/assets.gen.dart';
+import 'package:moovz_dash/l10n/l10n.dart';
+import 'package:moovz_dash/score/score.dart';
+import 'package:moovz_dash/utils/utils.dart';
+
+const double _outerPadding = 16;
+const double _cardMaxWidth = 640;
+const double _imageHeight = 160;
+const double _gap = 12;
 
 class ScoreOverviewPage extends StatelessWidget {
   const ScoreOverviewPage({super.key});
 
   static Page<void> page() {
-    return const MaterialPage<void>(
-      child: ScoreOverviewPage(),
-    );
+    return const MaterialPage<void>(child: ScoreOverviewPage());
   }
 
   @override
@@ -32,24 +34,22 @@ class ScoreOverviewPage extends StatelessWidget {
               Colors.black38,
               BlendMode.darken,
             ),
-            alignment:
-                isDesktop ? const Alignment(0, .7) : Alignment.bottomCenter,
+            alignment: isDesktop
+                ? const Alignment(0, .7)
+                : Alignment.bottomCenter,
           ),
         ),
-        child: Column(
-          children: [
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(_outerPadding),
               child: AppCard(
+                maxWidth: _cardMaxWidth,
                 border: Border.all(color: Colors.white30),
                 child: const _Content(),
               ),
             ),
-            const Spacer(),
-            const BottomBar(),
-            const SizedBox(height: 16),
-          ],
+          ),
         ),
       ),
     );
@@ -63,34 +63,38 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    const initialsColor = Color(0xFFA7EED2);
-    final initials = context.select((ScoreBloc bloc) => bloc.state.initials);
+    const nicknameColor = AppColors.primaryLight;
+    final nickname = context.select((ScoreBloc bloc) => bloc.state.nickname);
 
-    return Column(
+    return Row(
       children: [
-        Assets.images.dashWins.image(height: 160),
-        const Spacer(),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            l10n.shareYourScore,
-            textAlign: TextAlign.center,
+        Assets.images.dashWins.image(height: _imageHeight),
+        const SizedBox(width: _gap),
+        Expanded(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(l10n.shareYourScore, textAlign: TextAlign.center),
+                  const SizedBox(height: _gap),
+                  Text(
+                    nickname,
+                    style: textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                      color: nicknameColor,
+                    ),
+                  ),
+                  const SizedBox(height: _gap),
+                  const _ScoreWidget(),
+                  const SizedBox(height: _gap),
+                  if (kIsWeb) const WebButtons() else const MobileButtons(),
+                ],
+              ),
+            ),
           ),
         ),
-        const Spacer(flex: 2),
-        Text(
-          initials.join(),
-          style: textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 5,
-            color: initialsColor,
-          ),
-        ),
-        const Spacer(flex: 2),
-        const _ScoreWidget(),
-        const Spacer(flex: 4),
-        if (kIsWeb) const WebButtons() else const MobileButtons(),
-        const SizedBox(height: 16),
       ],
     );
   }
@@ -101,6 +105,7 @@ class _ScoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
     final score = context.select((ScoreBloc bloc) => bloc.score);
 
@@ -111,13 +116,13 @@ class _ScoreWidget extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color.fromARGB(81, 177, 177, 177),
-            Color.fromARGB(51, 54, 53, 103),
-            Color.fromARGB(137, 27, 27, 54),
+            AppColors.onSurfaceMuted,
+            AppColors.surface,
+            AppColors.background,
           ],
           stops: [0.05, 0.5, 1],
         ),
-        border: Border.all(color: Colors.white30),
+        border: Border.all(color: AppColors.border),
         borderRadius: BorderRadius.circular(100),
       ),
       child: Row(
@@ -134,7 +139,7 @@ class _ScoreWidget extends StatelessWidget {
               ),
               children: [
                 TextSpan(text: '${formatScore(score)} '),
-                const TextSpan(text: 'Pts'),
+                TextSpan(text: l10n.pts),
               ],
             ),
           ),
