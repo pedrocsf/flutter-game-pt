@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class AppBlocObserver extends BlocObserver {
@@ -21,9 +21,7 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
-typedef BootstrapBuilder = FutureOr<Widget> Function(
-  FirebaseAuth firebaseAuth,
-);
+typedef BootstrapBuilder = FutureOr<Widget> Function();
 
 Future<void> bootstrap(BootstrapBuilder builder) async {
   FlutterError.onError = (details) {
@@ -32,11 +30,10 @@ Future<void> bootstrap(BootstrapBuilder builder) async {
 
   Bloc.observer = const AppBlocObserver();
 
-  // Add cross-flavor configuration here
+  await SystemChrome.setPreferredOrientations(const [
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
 
-  runApp(
-    await builder(
-      FirebaseAuth.instance,
-    ),
-  );
+  runApp(await builder());
 }

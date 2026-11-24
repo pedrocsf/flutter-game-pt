@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:super_dash/audio/audio.dart';
-import 'package:super_dash/game/super_dash_game.dart';
-import 'package:super_dash/map_tester/map_tester.dart';
-import 'package:super_dash/settings/settings_controller.dart';
+import 'package:moovz_dash/audio/audio.dart';
+import 'package:moovz_dash/game/moovz_dash_game.dart';
+import 'package:moovz_dash/map_tester/map_tester.dart';
+import 'package:moovz_dash/settings/settings_controller.dart';
 
 import '../../helpers/helpers.dart';
 
@@ -49,10 +49,7 @@ void main() {
       await tester.tap(find.text('Load'));
       await tester.pump();
 
-      expect(
-        find.byType(GameWidget<SuperDashGame>),
-        findsOneWidget,
-      );
+      expect(find.byType(GameWidget<MoovzDashGame>), findsOneWidget);
     });
 
     testWidgets('can unload the game', (tester) async {
@@ -67,18 +64,12 @@ void main() {
       await tester.tap(find.text('Load'));
       await tester.pump();
 
-      expect(
-        find.byType(GameWidget<SuperDashGame>),
-        findsOneWidget,
-      );
+      expect(find.byType(GameWidget<MoovzDashGame>), findsOneWidget);
 
       await tester.tap(find.text('Unload'));
       await tester.pump();
 
-      expect(
-        find.byType(GameWidget<SuperDashGame>),
-        findsNothing,
-      );
+      expect(find.byType(GameWidget<MoovzDashGame>), findsNothing);
     });
 
     testWidgets('allows to reload a game', (tester) async {
@@ -93,8 +84,8 @@ void main() {
       await tester.tap(find.text('Load'));
       await tester.pump();
 
-      var widget = tester.widget<GameWidget<SuperDashGame>>(
-        find.byType(GameWidget<SuperDashGame>),
+      var widget = tester.widget<GameWidget<MoovzDashGame>>(
+        find.byType(GameWidget<MoovzDashGame>),
       );
 
       final originalGame = widget.game;
@@ -103,8 +94,8 @@ void main() {
       await tester.tap(find.text('Reload'));
       await tester.pumpAndSettle();
 
-      widget = tester.widget<GameWidget<SuperDashGame>>(
-        find.byType(GameWidget<SuperDashGame>),
+      widget = tester.widget<GameWidget<MoovzDashGame>>(
+        find.byType(GameWidget<MoovzDashGame>),
       );
 
       final updatedGame = widget.game;
