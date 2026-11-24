@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:super_dash/settings/persistence/persistence.dart';
+import 'package:moovz_dash/settings/persistence/persistence.dart';
 
 void main() {
   group('MemoryOnlySettingsPersistence', () {
@@ -33,10 +33,7 @@ void main() {
 
       await persistence.saveMuted(active: true);
 
-      expect(
-        await persistence.getMuted(defaultValue: false),
-        isTrue,
-      );
+      expect(await persistence.getMuted(defaultValue: false), isTrue);
     });
 
     test('saveMusicOn', () async {
@@ -44,10 +41,7 @@ void main() {
 
       await persistence.saveMusicOn(active: true);
 
-      expect(
-        await persistence.getMusicOn(),
-        isTrue,
-      );
+      expect(await persistence.getMusicOn(), isTrue);
     });
 
     test('saveSoundsOn', () async {
@@ -55,10 +49,7 @@ void main() {
 
       await persistence.saveSoundsOn(active: true);
 
-      expect(
-        await persistence.getSoundsOn(),
-        isTrue,
-      );
+      expect(await persistence.getSoundsOn(), isTrue);
     });
   });
 }

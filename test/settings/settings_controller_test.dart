@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:super_dash/settings/persistence/persistence.dart';
-import 'package:super_dash/settings/settings.dart';
+import 'package:moovz_dash/settings/persistence/persistence.dart';
+import 'package:moovz_dash/settings/settings.dart';
 
 class _MockSettingsPersistence extends Mock implements SettingsPersistence {}
 
@@ -14,15 +14,19 @@ void main() {
       persistence = _MockSettingsPersistence();
       when(persistence.getMusicOn).thenAnswer((_) async => true);
       when(persistence.getSoundsOn).thenAnswer((_) async => true);
-      when(() => persistence.getMuted(defaultValue: any(named: 'defaultValue')))
-          .thenAnswer((_) async => false);
+      when(
+        () => persistence.getMuted(defaultValue: any(named: 'defaultValue')),
+      ).thenAnswer((_) async => false);
 
-      when(() => persistence.saveMuted(active: any(named: 'active')))
-          .thenAnswer((_) async {});
-      when(() => persistence.saveMusicOn(active: any(named: 'active')))
-          .thenAnswer((_) async {});
-      when(() => persistence.saveSoundsOn(active: any(named: 'active')))
-          .thenAnswer((_) async {});
+      when(
+        () => persistence.saveMuted(active: any(named: 'active')),
+      ).thenAnswer((_) async {});
+      when(
+        () => persistence.saveMusicOn(active: any(named: 'active')),
+      ).thenAnswer((_) async {});
+      when(
+        () => persistence.saveSoundsOn(active: any(named: 'active')),
+      ).thenAnswer((_) async {});
 
       controller = SettingsController(persistence: persistence);
     });

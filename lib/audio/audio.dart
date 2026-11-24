@@ -8,8 +8,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
-import 'package:super_dash/audio/songs.dart';
-import 'package:super_dash/settings/settings_controller.dart';
+import 'package:moovz_dash/audio/songs.dart';
+import 'package:moovz_dash/settings/settings_controller.dart';
 
 typedef CreateAudioPlayer = AudioPlayer Function({required String playerId});
 
@@ -17,20 +17,20 @@ enum Sfx {
   jump,
   run,
   doubleJump,
-  phoenixJump,
-  acornPickup,
-  eggPickup,
-  featherPowerup
+  zoneFiveJump,
+  energyPickup,
+  medalPickup,
+  zoneFivePowerup,
 }
 
 const sfx = {
-  Sfx.jump: 'sfx/Dash_Jump.mp3',
-  Sfx.run: 'sfx/Dash_Footstep_Run.mp3',
-  Sfx.doubleJump: 'sfx/Phoenix_DOUBLEJump.wav',
-  Sfx.phoenixJump: 'sfx/Phoenix_Jump.wav',
-  Sfx.acornPickup: 'sfx/Dash_AcornPickup.mp3',
-  Sfx.eggPickup: 'sfx/Dash_EggPickup.mp3',
-  Sfx.featherPowerup: 'sfx/Dash_FeatherPowerup.mp3',
+  Sfx.jump: 'sfx/Moovz_Jump.wav',
+  Sfx.run: 'sfx/Moovz_Footstep_Run.wav',
+  Sfx.doubleJump: 'sfx/Moovz_DoubleJump.wav',
+  Sfx.zoneFiveJump: 'sfx/Moovz_ZoneFiveJump.wav',
+  Sfx.energyPickup: 'sfx/Moovz_EnergyPickup.wav',
+  Sfx.medalPickup: 'sfx/Moovz_MedalPickup.wav',
+  Sfx.zoneFivePowerup: 'sfx/Moovz_ZoneFivePowerup.wav',
 };
 
 /// Allows playing music and sound. A facade to `package:audioplayers`.
@@ -47,13 +47,13 @@ class AudioController {
   AudioController({
     int polyphony = 2,
     CreateAudioPlayer createPlayer = AudioPlayer.new,
-  })  : assert(polyphony >= 1, 'polyphony must be bigger or equals than 1'),
-        _musicPlayer = createPlayer(playerId: 'musicPlayer'),
-        _sfxPlayers = Iterable.generate(
-          polyphony,
-          (i) => createPlayer(playerId: 'sfxPlayer#$i'),
-        ).toList(growable: false),
-        _playlist = Queue.of(List<Song>.of(songs)..shuffle()) {
+  }) : assert(polyphony >= 1, 'polyphony must be bigger or equals than 1'),
+       _musicPlayer = createPlayer(playerId: 'musicPlayer'),
+       _sfxPlayers = Iterable.generate(
+         polyphony,
+         (i) => createPlayer(playerId: 'sfxPlayer#$i'),
+       ).toList(growable: false),
+       _playlist = Queue.of(List<Song>.of(songs)..shuffle()) {
     _musicPlayer.onPlayerComplete.listen(_changeSong);
   }
   static final _log = Logger('AudioController');
@@ -234,9 +234,11 @@ class AudioController {
           await _playFirstSongInPlaylist();
         }
       case PlayerState.stopped:
-        _log.info('resumeMusic() called when music is stopped. '
-            "This probably means we haven't yet started the music. "
-            'For example, the game was started with sound off.');
+        _log.info(
+          'resumeMusic() called when music is stopped. '
+          "This probably means we haven't yet started the music. "
+          'For example, the game was started with sound off.',
+        );
         await _playFirstSongInPlaylist();
       case PlayerState.playing:
         _log.warning(

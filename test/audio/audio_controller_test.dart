@@ -4,8 +4,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:super_dash/audio/audio.dart';
-import 'package:super_dash/settings/settings.dart';
+import 'package:moovz_dash/audio/audio.dart';
+import 'package:moovz_dash/settings/settings.dart';
 
 class _MockSettingsController extends Mock implements SettingsController {}
 
@@ -23,14 +23,11 @@ class _MockAudioPlayerFactory {
     final streamController = StreamController<void>();
 
     when(
-      () => player.play(
-        any(),
-        volume: any(named: 'volume'),
-      ),
+      () => player.play(any(), volume: any(named: 'volume')),
     ).thenAnswer((_) async {});
-    when(() => player.onPlayerComplete).thenAnswer(
-      (_) => streamController.stream,
-    );
+    when(
+      () => player.onPlayerComplete,
+    ).thenAnswer((_) => streamController.stream);
     when(() => player.setReleaseMode(any())).thenAnswer((_) async {});
     when(player.stop).thenAnswer((_) async {});
     when(player.pause).thenAnswer((_) async {});
@@ -82,9 +79,7 @@ void main() {
     test('can be instantiated', () {
       final playerFactory = _MockAudioPlayerFactory();
       expect(
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-        ),
+        AudioController(createPlayer: playerFactory.createPlayer),
         isNotNull,
       );
     });
@@ -109,13 +104,12 @@ void main() {
 
         AudioController(
           createPlayer: playerFactory.createPlayer,
-        ).attachSettings(
-          settingsController,
-        );
+        ).attachSettings(settingsController);
 
         final player = playerFactory.players['musicPlayer'];
-        verify(() => player!.play(any(), volume: any(named: 'volume')))
-            .called(1);
+        verify(
+          () => player!.play(any(), volume: any(named: 'volume')),
+        ).called(1);
       });
 
       test('replace an old settings', () {
@@ -159,25 +153,16 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..playSfx(Sfx.jump);
 
         final player = playerFactory.players['sfxPlayer#0']!;
 
-        final captured = verify(
-          () => player.play(
-            captureAny(),
-          ),
-        ).captured;
+        final captured = verify(() => player.play(captureAny())).captured;
         final source = captured.first;
         expect(source, isA<AssetSource>());
-        expect((source as AssetSource).path, 'sfx/Dash_Jump.mp3');
+        expect((source as AssetSource).path, 'sfx/Moovz_Jump.wav');
       });
 
       test("doesn't play when is muted", () {
@@ -187,22 +172,13 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(true);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..playSfx(Sfx.jump);
 
         final player = playerFactory.players['sfxPlayer#0']!;
 
-        verifyNever(
-          () => player.play(
-            AssetSource('sfx/add_to_hand.mp3'),
-          ),
-        );
+        verifyNever(() => player.play(AssetSource('sfx/Moovz_Jump.wav')));
       });
 
       test("doesn't play when sounds is off", () {
@@ -212,22 +188,13 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..playSfx(Sfx.jump);
 
         final player = playerFactory.players['sfxPlayer#0']!;
 
-        verifyNever(
-          () => player.play(
-            AssetSource('sfx/add_to_hand.mp3'),
-          ),
-        );
+        verifyNever(() => player.play(AssetSource('sfx/Moovz_Jump.wav')));
       });
     });
 
@@ -241,13 +208,8 @@ void main() {
         when(() => soundsOn.value).thenReturn(true);
         when(() => musicOn.value).thenReturn(true);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..playSfx(Sfx.jump);
 
         final musicPlayer = playerFactory.players.entries
@@ -278,13 +240,8 @@ void main() {
         when(() => soundsOn.value).thenReturn(true);
         when(() => musicOn.value).thenReturn(true);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..playSfx(Sfx.jump);
 
         final musicPlayer = playerFactory.players.entries
@@ -314,9 +271,7 @@ void main() {
         AudioController(
           createPlayer: playerFactory.createPlayer,
           polyphony: 1,
-        ).attachSettings(
-          settingsController,
-        );
+        ).attachSettings(settingsController);
 
         final musicPlayer = playerFactory.players.entries
             .firstWhere((entry) => entry.key.startsWith('music'))
@@ -342,13 +297,8 @@ void main() {
         when(() => muted.value).thenReturn(false);
         when(() => musicOn.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..playSfx(Sfx.jump);
 
         final sfxPlayer = playerFactory.players.entries
@@ -374,13 +324,8 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..attachLifecycleNotifier(lifecycleNotifier)
           ..playSfx(Sfx.jump);
 
@@ -411,13 +356,8 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..attachLifecycleNotifier(lifecycleNotifier)
           ..playSfx(Sfx.jump);
 
@@ -448,13 +388,8 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..attachLifecycleNotifier(lifecycleNotifier)
           ..playSfx(Sfx.jump);
 
@@ -485,13 +420,8 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..attachLifecycleNotifier(lifecycleNotifier)
           ..playSfx(Sfx.jump);
 
@@ -516,13 +446,8 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..attachLifecycleNotifier(lifecycleNotifier);
 
         final musicPlayer = playerFactory.players.entries
@@ -536,8 +461,9 @@ void main() {
 
         await Future.microtask(() {});
 
-        verify(() => musicPlayer.play(any(), volume: any(named: 'volume')))
-            .called(2);
+        verify(
+          () => musicPlayer.play(any(), volume: any(named: 'volume')),
+        ).called(2);
       });
 
       test('when resuming, and player is completed, play the next', () async {
@@ -548,13 +474,8 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..attachLifecycleNotifier(lifecycleNotifier);
 
         final musicPlayer = playerFactory.players.entries
@@ -567,8 +488,9 @@ void main() {
 
         await Future.microtask(() {});
 
-        verify(() => musicPlayer.play(any(), volume: any(named: 'volume')))
-            .called(2);
+        verify(
+          () => musicPlayer.play(any(), volume: any(named: 'volume')),
+        ).called(2);
       });
 
       test('when resuming, and player is playing, do nothing', () async {
@@ -579,13 +501,8 @@ void main() {
         when(() => musicOn.value).thenReturn(true);
         when(() => muted.value).thenReturn(false);
 
-        AudioController(
-          createPlayer: playerFactory.createPlayer,
-          polyphony: 1,
-        )
-          ..attachSettings(
-            settingsController,
-          )
+        AudioController(createPlayer: playerFactory.createPlayer, polyphony: 1)
+          ..attachSettings(settingsController)
           ..attachLifecycleNotifier(lifecycleNotifier);
 
         final musicPlayer = playerFactory.players.entries
@@ -598,8 +515,9 @@ void main() {
 
         await Future.microtask(() {});
 
-        verify(() => musicPlayer.play(any(), volume: any(named: 'volume')))
-            .called(1);
+        verify(
+          () => musicPlayer.play(any(), volume: any(named: 'volume')),
+        ).called(1);
       });
     });
 
@@ -614,9 +532,7 @@ void main() {
         AudioController(
           createPlayer: playerFactory.createPlayer,
           polyphony: 1,
-        ).attachSettings(
-          settingsController,
-        );
+        ).attachSettings(settingsController);
 
         final musicPlayer = playerFactory.players.entries
             .firstWhere((entry) => entry.key.startsWith('music'))
@@ -629,8 +545,9 @@ void main() {
 
         await Future.microtask(() {});
 
-        verify(() => musicPlayer.play(any(), volume: any(named: 'volume')))
-            .called(2);
+        verify(
+          () => musicPlayer.play(any(), volume: any(named: 'volume')),
+        ).called(2);
       });
     });
   });
