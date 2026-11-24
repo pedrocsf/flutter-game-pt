@@ -7,25 +7,12 @@
  <tileset firstgid="73" source="objects/tile_items_v2.tsx"/>
  <tileset firstgid="77" source="tiles/tile_decorations_v01.tsx"/>
  <tileset firstgid="92" source="tiles/tile_forest_ground_v04.tsx"/>
- <tileset firstgid="224" source="anim/spritesheet_dash_run.tsx"/>
- <tileset firstgid="240" source="anim/spritesheet_dash_deathDrown.tsx"/>
- <tileset firstgid="320" source="anim/spritesheet_dash_deathFaint.tsx"/>
- <tileset firstgid="344" source="anim/spritesheet_dash_deathPit.tsx"/>
- <tileset firstgid="368" source="anim/spritesheet_dash_edgeGrab.tsx"/>
- <tileset firstgid="392" source="anim/spritesheet_dash_flap.tsx"/>
- <tileset firstgid="404" source="anim/spritesheet_dash_idle.tsx"/>
- <tileset firstgid="428" source="anim/spritesheet_dash_jump.tsx"/>
- <tileset firstgid="444" source="anim/spritesheet_dash_slide.tsx"/>
- <tileset firstgid="460" source="anim/spritesheet_phoenixDash_doublejump.tsx"/>
- <tileset firstgid="476" source="anim/spritesheet_phoenixDash_idle.tsx"/>
- <tileset firstgid="500" source="anim/spritesheet_phoenixDash_jump.tsx"/>
- <tileset firstgid="516" source="anim/spritesheet_phoenixDash_run.tsx"/>
  <tileset firstgid="532" source="tiles/tile_treehouse.tsx"/>
  <tileset firstgid="664" source="anim/spritesheet_poof.tsx"/>
- <tileset firstgid="684" source="anim/spritesheet_enemy_beetle.tsx"/>
- <tileset firstgid="700" source="anim/spritesheet_enemy_butterfly.tsx"/>
- <tileset firstgid="714" source="anim/spritesheet_item_egg.tsx"/>
- <tileset firstgid="762" source="anim/spritesheet_item_feather.tsx"/>
+ <tileset firstgid="684" source="anim/spritesheet_enemy_cramp.tsx"/>
+ <tileset firstgid="700" source="anim/spritesheet_enemy_lazy_cloud.tsx"/>
+ <tileset firstgid="714" source="anim/spritesheet_item_medal.tsx"/>
+ <tileset firstgid="762" source="anim/spritesheet_item_zonefive.tsx"/>
  <tileset firstgid="792" source="anim/spritesheet_fx_small.tsx"/>
  <tileset firstgid="801" source="anim/spritesheet_poof_orange.tsx"/>
  <tileset firstgid="821" source="anim/spritesheet_fx_large.tsx"/>
@@ -504,120 +491,120 @@
   <object id="676" gid="74" x="5088" y="1856" width="64" height="64"/>
   <object id="817" gid="714" x="3968" y="1408" width="64" height="64">
    <properties>
-    <property name="Type" value="Egg"/>
+    <property name="Type" value="Medal"/>
    </properties>
   </object>
   <object id="818" gid="714" x="4160" y="1984" width="64" height="64">
    <properties>
-    <property name="Type" value="Egg"/>
+    <property name="Type" value="Medal"/>
    </properties>
   </object>
   <object id="819" gid="714" x="6944" y="1664" width="64" height="64">
    <properties>
-    <property name="Type" value="Egg"/>
+    <property name="Type" value="Medal"/>
    </properties>
   </object>
   <object id="820" gid="762" x="3712" y="1600" width="64" height="64">
    <properties>
-    <property name="Type" value="Feather"/>
+    <property name="Type" value="ZoneFive"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="9" name="enemies">
   <object id="788" gid="684" x="4672" y="1920" width="64" height="64">
    <properties>
-    <property name="Type" value="Beetle"/>
+    <property name="Type" value="Cramp"/>
    </properties>
   </object>
   <object id="789" gid="684" x="5440" y="1984" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Beetle"/>
+    <property name="Type" value="Cramp"/>
    </properties>
   </object>
   <object id="793" gid="684" x="6464" y="1280" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Beetle"/>
+    <property name="Type" value="Cramp"/>
    </properties>
   </object>
   <object id="794" gid="684" x="6336" y="1856" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Beetle"/>
+    <property name="Type" value="Cramp"/>
    </properties>
   </object>
   <object id="795" gid="684" x="7104" y="1152" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Beetle"/>
+    <property name="Type" value="Cramp"/>
    </properties>
   </object>
   <object id="796" gid="684" x="7552" y="1984" width="64" height="64">
    <properties>
     <property name="Path" value="I{2L, 2R}"/>
-    <property name="Type" value="Beetle"/>
+    <property name="Type" value="Cramp"/>
    </properties>
   </object>
   <object id="797" gid="684" x="8064" y="2112" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Beetle"/>
+    <property name="Type" value="Cramp"/>
    </properties>
   </object>
   <object id="798" gid="700" x="8128" y="1600" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="{10L}"/>
-    <property name="Type" value="Butterfly"/>
+    <property name="Type" value="LazyCloud"/>
    </properties>
   </object>
   <object id="799" gid="700" x="7296" y="1952" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="I{1T, 1B}"/>
-    <property name="Type" value="Butterfly"/>
+    <property name="Type" value="LazyCloud"/>
    </properties>
   </object>
   <object id="800" gid="700" x="6944" y="1952" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="I{1T, 1B}"/>
-    <property name="Type" value="Butterfly"/>
+    <property name="Type" value="LazyCloud"/>
    </properties>
   </object>
   <object id="802" gid="700" x="6592" y="1952" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="I{1T, 1B}"/>
-    <property name="Type" value="Butterfly"/>
+    <property name="Type" value="LazyCloud"/>
    </properties>
   </object>
   <object id="804" gid="700" x="6016" y="1472" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="{10L}"/>
-    <property name="Type" value="Butterfly"/>
+    <property name="Type" value="LazyCloud"/>
    </properties>
   </object>
   <object id="805" gid="700" x="4736" y="1088" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="I{1T, 1B}"/>
-    <property name="Type" value="Butterfly"/>
+    <property name="Type" value="LazyCloud"/>
    </properties>
   </object>
   <object id="806" gid="700" x="4160" y="1568" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="{10L}"/>
-    <property name="Type" value="Butterfly"/>
+    <property name="Type" value="LazyCloud"/>
    </properties>
   </object>
   <object id="821" gid="684" x="3712" y="1984" width="64" height="64">
    <properties>
     <property name="Path" value="I{3L, 3R}"/>
-    <property name="Type" value="Beetle"/>
+    <property name="Type" value="Cramp"/>
    </properties>
   </object>
  </objectgroup>
@@ -663,22 +650,6 @@
   <object id="759" type="Respawn" x="6816" y="1088">
    <point/>
   </object>
- </objectgroup>
- <objectgroup id="45" name="Dash" visible="0">
-  <object id="514" gid="224" x="1024" y="1984" width="64" height="64"/>
-  <object id="772" gid="240" x="576" y="1984" width="64" height="64"/>
-  <object id="773" gid="320" x="640" y="1984" width="64" height="64"/>
-  <object id="774" gid="344" x="704" y="1984" width="64" height="64"/>
-  <object id="775" gid="368" x="768" y="1984" width="64" height="64"/>
-  <object id="776" gid="392" x="832" y="1984" width="64" height="64"/>
-  <object id="777" gid="404" x="896" y="1984" width="64" height="64"/>
-  <object id="778" gid="428" x="960" y="1984" width="64" height="64"/>
-  <object id="779" gid="444" x="1088" y="1984" width="64" height="64"/>
-  <object id="780" gid="460" x="1152" y="1984" width="64" height="64"/>
-  <object id="781" gid="476" x="1216" y="1984" width="64" height="64"/>
-  <object id="782" gid="500" x="1280" y="2048" width="64" height="128"/>
-  <object id="783" gid="516" x="1344" y="1984" width="64" height="64"/>
-  <object id="785" gid="664" x="832" y="2048" width="192" height="192"/>
  </objectgroup>
  <layer id="56" name="treehouse_front" width="156" height="40">
   <data encoding="csv">

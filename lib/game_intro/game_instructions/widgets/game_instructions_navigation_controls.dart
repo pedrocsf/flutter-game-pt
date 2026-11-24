@@ -1,7 +1,7 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_dash/game_intro/game_instructions/game_instructions.dart';
+import 'package:moovz_dash/game_intro/game_instructions/game_instructions.dart';
 
 class GameInstructionNavigationControls extends StatelessWidget {
   const GameInstructionNavigationControls({
@@ -29,7 +29,7 @@ class GameInstructionNavigationControls extends StatelessWidget {
               _PageIndicator(step: step),
           ],
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -40,9 +40,9 @@ class GameInstructionNavigationControls extends StatelessWidget {
                 onPressed: isFirstStep
                     ? null
                     : () => pageController.previousPage(
-                          duration: const Duration(milliseconds: 400),
-                          curve: Curves.easeIn,
-                        ),
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeIn,
+                      ),
               ),
             ),
             const SizedBox(width: 24),
@@ -51,9 +51,9 @@ class GameInstructionNavigationControls extends StatelessWidget {
               onPressed: isLastStep
                   ? Navigator.of(context).pop
                   : () => pageController.nextPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeIn,
-                      ),
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeIn,
+                    ),
             ),
           ],
         ),
@@ -63,19 +63,14 @@ class GameInstructionNavigationControls extends StatelessWidget {
 }
 
 class _PageIndicator extends StatelessWidget {
-  const _PageIndicator({
-    required this.step,
-  });
+  const _PageIndicator({required this.step});
 
   static const inactiveGradient = [
-    Color(0xFFEEF0F2),
-    Colors.white,
+    AppColors.onSurfaceMuted,
+    AppColors.onSurface,
   ];
 
-  static const activeGradient = [
-    Color(0xFF9CECCD),
-    Color(0xFF9CECCD),
-  ];
+  static const activeGradient = AppColors.primaryGradient;
 
   final GameInstructionsStep step;
 

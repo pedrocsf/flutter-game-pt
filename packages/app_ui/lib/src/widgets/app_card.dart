@@ -1,3 +1,4 @@
+import 'package:app_ui/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 /// {@template app_card}
@@ -7,22 +8,31 @@ class AppCard extends StatelessWidget {
   /// {@macro app_card}
   const AppCard({
     required this.child,
-    this.backgroundColor = const Color(0xE51B1B36),
+    this.backgroundColor = AppColors.surfaceDialog,
     this.gradient = const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Color.fromARGB(81, 177, 177, 177),
-        Color.fromARGB(51, 54, 53, 103),
-        Color.fromARGB(230, 27, 27, 54),
+        AppColors.surface,
+        AppColors.surfaceDialog,
+        AppColors.background,
       ],
       stops: [0.05, 0.5, 1],
     ),
     this.borderRadius = const BorderRadius.all(Radius.circular(24)),
-    this.border,
+    this.border = const Border.fromBorderSide(
+      BorderSide(color: AppColors.border),
+    ),
     this.imageProvider,
+    this.maxWidth = defaultMaxWidth,
     super.key,
   });
+
+  /// The default maximum width of the card.
+  static const double defaultMaxWidth = 328;
+
+  /// The maximum width of the card.
+  final double maxWidth;
 
   /// The content of the card.
   final Widget child;
@@ -48,7 +58,7 @@ class AppCard extends StatelessWidget {
     final showImage = imageProvider != null;
 
     return Container(
-      constraints: const BoxConstraints(maxWidth: 328, maxHeight: 624),
+      constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: 624),
       decoration: BoxDecoration(
         borderRadius: borderRadius,
         border: showImage ? null : border,

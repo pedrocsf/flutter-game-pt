@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "gameIntroPageHeadline": "Fly into Super Dash, avoid the bugs, collect points, and see how far you can go!",
+    "gameIntroPageHeadline": "Check in to Moovz Dash, dodge the obstacles, collect medals, and see how far your workout takes you!",
     "@gameIntroPageHeadline": {
         "description": "Text shown in the Headline of the Game Info Page"
     },
@@ -12,7 +12,7 @@
     "@gameInstructionsPageAutoRunTitle": {
         "description": "Text shown in the title of the auto run instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPageAutoRunDescription": "Welcome to Super Dash. In this game Dash runs automatically.",
+    "gameInstructionsPageAutoRunDescription": "Welcome to Moovz Dash. In this workout, Dash runs automatically.",
     "@gameInstructionsPageAutoRunDescription": {
         "description": "Text shown in the description of the auto run instruction of the Game Instructions Overlay"
     },
@@ -28,35 +28,35 @@
     "@gameInstructionsPageTapToJumpDescriptionDesktop": {
         "description": "Text shown in the description of the tap to jump instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPageCollectEggsAcornsTitle": "Collect Eggs & Acorns",
+    "gameInstructionsPageCollectEggsAcornsTitle": "Collect Medals & Energy",
     "@gameInstructionsPageCollectEggsAcornsTitle": {
         "description": "Text shown in the title of the collect eggs and acorns instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPageCollectEggsAcornsDescription": "Get points by collecting eggs and acorns in the stage.",
+    "gameInstructionsPageCollectEggsAcornsDescription": "Earn points by collecting medals and energy along your workout.",
     "@gameInstructionsPageCollectEggsAcornsDescription": {
         "description": "Text shown in the description of the collect eggs and acorns instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPagePowerfulWingsTitle": "Powerful Wings",
+    "gameInstructionsPagePowerfulWingsTitle": "Zone 5 Power-Up",
     "@gameInstructionsPagePowerfulWingsTitle": {
         "description": "Text shown in the title of the powerful wings instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPagePowerfulWingsDescription": "Collect the golden feather to power up Dash with Flutter. While in midair, tap to do a double jump and see Dash fly!",
+    "gameInstructionsPagePowerfulWingsDescription": "Collect Zone 5 to power up Dash. While in midair, tap to do a double jump and see Dash fly!",
     "@gameInstructionsPagePowerfulWingsDescription": {
         "description": "Text shown in the description of the powerful wings instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPageLevelGatesTitle": "Level Gates",
+    "gameInstructionsPageLevelGatesTitle": "Workouts",
     "@gameInstructionsPageLevelGatesTitle": {
         "description": "Text shown in the title of the level gates instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPageLevelGatesDescription": "Advance through gates to face tougher challenges at higher stages.",
+    "gameInstructionsPageLevelGatesDescription": "Move through the workouts to face tougher challenges at each stage.",
     "@gameInstructionsPageLevelGatesDescription": {
         "description": "Text shown in the description of the level gates instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPageAvoidBugsTitle": "Avoid Bugs",
+    "gameInstructionsPageAvoidBugsTitle": "Avoid Obstacles",
     "@gameInstructionsPageAvoidBugsTitle": {
         "description": "Text shown in the title of the avoid bugs instruction of the Game Instructions Overlay"
     },
-    "gameInstructionsPageAvoidBugsDescription": "No one likes bugs! Jump to dodge them and avoid taking damage.",
+    "gameInstructionsPageAvoidBugsDescription": "Watch out for obstacles! Jump over them to avoid losing energy.",
     "@gameInstructionsPageAvoidBugsDescription": {
         "description": "Text shown in the description of the avoid bugs instruction of the Game Instructions Overlay"
     },
@@ -76,7 +76,7 @@
     "@mobileModeUnavailableDescription": {
         "description": "Description shown in the Game Info Page for mobile devices joining from a browser"
     },
-    "superDash": "Super Dash",
+    "superDash": "Moovz Dash",
     "@superDash": {
         "description": "Game name"
     },
@@ -84,7 +84,7 @@
     "@howItsMade": {
         "description": "Text shown in the game info page"
     },
-    "aboutSuperDash": "About Super Dash",
+    "aboutSuperDash": "About Moovz Dash",
     "@aboutSuperDash": {
         "description": "Text shown in the game info popup"
     },
@@ -92,7 +92,7 @@
     "@learn": {
         "description": "Text shown in the game info popup"
     },
-    "howWeBuiltSuperDash": "how we built Super Dash",
+    "howWeBuiltSuperDash": "how we built Moovz Dash",
     "@howWeBuiltSuperDash": {
         "description": "Text shown in the game info popup"
     },
@@ -124,19 +124,23 @@
     "@enter": {
         "description": "Text shown in the score submission page"
     },
-    "initialsBlacklistedMessage": "Keep it PG, use different initials",
-    "@initialsBlacklistedMessage": {
+    "nicknameBlacklistedMessage": "Keep it respectful, choose another nickname",
+    "@nicknameBlacklistedMessage": {
         "description": "Text shown in the score submission page"
     },
-    "initialsErrorMessage": "Please enter three initials",
-    "@initialsErrorMessage": {
+    "inputNicknamePageHeadline": "Choose your nickname for\nthe ranking",
+    "@inputNicknamePageHeadline": {
+        "description": "Text shown in the headline of the input nickname page"
+    },
+    "nicknameErrorMessage": "Enter a nickname with 3 to 12 characters (letters, numbers or _)",
+    "@nicknameErrorMessage": {
         "description": "Text shown in the score submission page"
     },
     "scoreSubmissionErrorMessage": "There was an error submitting your score",
     "@scoreSubmissionErrorMessage": {
         "description": "Text shown in the score submission page"
     },
-    "shareYourScore": "Share your Super Dash score and challenge your friends to do more!",
+    "shareYourScore": "Share your Moovz Dash score and challenge your friends to go further!",
     "@shareYourScore": {
         "description": "Text shown in the share page"
     },
@@ -156,7 +160,7 @@
     "@seeTheRanking": {
         "description": "Text shown in the share page"
     },
-    "gameOver": "Game over!",
+    "gameOver": "Workout over!",
     "@gameOver": {
         "description": "Text shown in the game over page"
     },
@@ -172,7 +176,7 @@
     "@submitScore": {
         "description": "Text shown in the game over page"
     },
-    "playAgain": "Play again",
+    "playAgain": "Train again",
     "@playAgain": {
         "description": "Text shown in the game over page"
     },
@@ -185,11 +189,11 @@
             }
         }
     },
-    "leaderboardPageLeaderboardHeadline": "Leaderboard",
+    "leaderboardPageLeaderboardHeadline": "Ranking",
     "@leaderboardPageLeaderboardHeadline": {
         "description": "Text shown in the leaderboard page headline"
     },
-    "leaderboardPageLeaderboardErrorText": "There was an error while fetching the leaderboard.",
+    "leaderboardPageLeaderboardErrorText": "There was an error while fetching the ranking.",
     "@leaderboardPageLeaderboardErrorText": {
         "description": "Text shown in the leaderboard page when there is an error"
     },
@@ -201,16 +205,114 @@
     "@leaderboardPageGoBackButton": {
         "description": "Text shown in the leaderboard page go back button"
     },
-    "tapToStart": "Tap/press Space to start",
+    "tapToStart": "Tap/press Space to start your workout\nTap to jump, swipe down to slide",
     "@tapToStart": {
         "description": "Text shown in the game page"
     },
-    "downloadAppMessage": "Fly into Super Dash, avoid the bugs, collect points, and see how far you can go!",
+    "downloadAppMessage": "Check in to Moovz Dash, dodge the obstacles, collect medals, and see how far your workout takes you!",
     "@downloadAppMessage": {
         "description": "Text shown in the download mobile app page"
     },
     "downloadAppLabel": "Download the app",
     "@downloadAppLabel": {
         "description": "Button lable for the app download"
+    },
+    "difficultyLabel": "Difficulty",
+    "@difficultyLabel": {
+        "description": "difficultyLabel"
+    },
+    "difficultyEasy": "Easy",
+    "@difficultyEasy": {
+        "description": "difficultyEasy"
+    },
+    "difficultyMedium": "Medium",
+    "@difficultyMedium": {
+        "description": "difficultyMedium"
+    },
+    "difficultyHard": "Hard",
+    "@difficultyHard": {
+        "description": "difficultyHard"
+    },
+    "gameLivesLabel": "Lives: {lives}",
+    "@gameLivesLabel": {
+        "description": "Accessibility label of the lives indicator",
+        "placeholders": {
+            "lives": {
+                "type": "int"
+            }
+        }
+    },
+    "specialItemMedalName": "Medal",
+    "@specialItemMedalName": {
+        "description": "Name of the medal item shown in the special item popup"
+    },
+    "specialItemMedalEffect": "+{points} points",
+    "@specialItemMedalEffect": {
+        "description": "Effect of the medal item shown in the special item popup",
+        "placeholders": {
+            "points": {
+                "type": "int"
+            }
+        }
+    },
+    "specialItemZoneFiveName": "Zone 5",
+    "@specialItemZoneFiveName": {
+        "description": "Name of the Zone 5 item shown in the special item popup"
+    },
+    "specialItemZoneFiveEffect": "Double jump and protection",
+    "@specialItemZoneFiveEffect": {
+        "description": "Effect of the Zone 5 item shown in the special item popup"
+    },
+    "specialItemExtraLifeName": "Extra life",
+    "@specialItemExtraLifeName": {
+        "description": "Name of the extra life item shown in the special item popup"
+    },
+    "specialItemExtraLifeEffect": "+1 life",
+    "@specialItemExtraLifeEffect": {
+        "description": "Effect of the extra life item shown in the special item popup"
+    },
+    "bestiaryTitle": "Enemies and items",
+    "@bestiaryTitle": {
+        "description": "Title of the enemies list page"
+    },
+    "enemyNameCramp": "Cramp",
+    "@enemyNameCramp": {
+        "description": "Name of an enemy shown in the enemies list"
+    },
+    "enemyNameSoreness": "Muscle soreness",
+    "@enemyNameSoreness": {
+        "description": "Name of an enemy shown in the enemies list"
+    },
+    "enemyNameIcePack": "Ice pack",
+    "@enemyNameIcePack": {
+        "description": "Name of an enemy shown in the enemies list"
+    },
+    "enemyNameFatigueHourglass": "Fatigue hourglass",
+    "@enemyNameFatigueHourglass": {
+        "description": "Name of an enemy shown in the enemies list"
+    },
+    "enemyNameLazyCloud": "Lazy cloud",
+    "@enemyNameLazyCloud": {
+        "description": "Name of an enemy shown in the enemies list"
+    },
+    "enemyNameBandage": "Bandage",
+    "@enemyNameBandage": {
+        "description": "Name of an enemy shown in the enemies list"
+    },
+    "enemyNameLowBar": "Low bar",
+    "@enemyNameLowBar": {
+        "description": "Name of an enemy shown in the enemies list"
+    },
+    "bestiaryEnemiesHeading": "Enemies",
+    "@bestiaryEnemiesHeading": {
+        "description": "Text of the bestiaryEnemiesHeading in the enemies and items page"
+    },
+    "bestiaryItemsHeading": "Items",
+    "@bestiaryItemsHeading": {
+        "description": "Text of the bestiaryItemsHeading in the enemies and items page"
+    },
+    "itemNameEnergy": "Energy",
+    "@itemNameEnergy": {
+        "description": "Text of the itemNameEnergy in the enemies and items page"
     }
 }

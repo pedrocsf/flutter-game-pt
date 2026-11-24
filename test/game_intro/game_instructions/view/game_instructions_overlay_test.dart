@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:super_dash/game_intro/game_instructions/game_instructions.dart';
+import 'package:moovz_dash/game_intro/game_instructions/game_instructions.dart';
 
 import '../../../helpers/helpers.dart';
 
@@ -17,10 +17,8 @@ void main() {
   group('GameInstructionsOverlay', () {
     test(
       'is routable',
-      () => expect(
-        GameInstructionsOverlay.route(),
-        isA<HeroDialogRoute<void>>(),
-      ),
+      () =>
+          expect(GameInstructionsOverlay.route(), isA<HeroDialogRoute<void>>()),
     );
 
     testWidgets('renders GameInstructionsOverlayView', (tester) async {
@@ -38,9 +36,9 @@ void main() {
     setUp(() {
       cubit = _MockGameInstructionsCubit();
 
-      when(() => cubit.state).thenReturn(
-        GameInstructionsState(GameInstructionsStep.autoRun),
-      );
+      when(
+        () => cubit.state,
+      ).thenReturn(GameInstructionsState(GameInstructionsStep.autoRun));
     });
 
     Widget buildSubject() {

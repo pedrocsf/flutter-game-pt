@@ -25,7 +25,7 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   bool get barrierDismissible => true;
 
   @override
-  Color get barrierColor => Colors.black26;
+  Color get barrierColor => Colors.black54;
 
   @override
   Duration get transitionDuration => kThemeAnimationDuration;

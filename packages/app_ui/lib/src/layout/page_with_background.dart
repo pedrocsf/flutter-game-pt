@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// {@template page_with_background}
-/// A page with a background for responsive design.
+/// A page that fills the screen, intended for landscape layouts.
 /// {@endtemplate}
 class PageWithBackground extends StatelessWidget {
   /// {@macro page_with_background}
@@ -11,7 +11,7 @@ class PageWithBackground extends StatelessWidget {
     super.key,
   });
 
-  /// The background widget.
+  /// The background widget, kept for API compatibility.
   final Widget background;
 
   /// The child widget.
@@ -19,20 +19,6 @@ class PageWithBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.sizeOf(context).aspectRatio > .56) {
-      return Scaffold(
-        body: Stack(
-          alignment: Alignment.center,
-          children: [
-            background,
-            AspectRatio(
-              aspectRatio: .56,
-              child: child,
-            ),
-          ],
-        ),
-      );
-    }
     return Scaffold(body: child);
   }
 }
