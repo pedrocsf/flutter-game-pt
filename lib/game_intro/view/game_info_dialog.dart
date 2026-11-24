@@ -3,9 +3,8 @@ import 'dart:ui';
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:super_dash/constants/constants.dart';
-import 'package:super_dash/gen/assets.gen.dart';
-import 'package:super_dash/l10n/l10n.dart';
+import 'package:moovz_dash/constants/constants.dart';
+import 'package:moovz_dash/l10n/l10n.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class GameInfoDialog extends StatelessWidget {
@@ -24,20 +23,20 @@ class GameInfoDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final bodyStyle = AppTextStyles.bodyLarge;
-    const highlightColor = Color(0xFF9CECCD);
+    const highlightColor = AppColors.primaryLight;
     final linkStyle = AppTextStyles.bodyLarge.copyWith(
       color: highlightColor,
       decoration: TextDecoration.underline,
       decorationColor: highlightColor,
     );
     return AppDialog(
-      border: Border.all(color: Colors.white24),
+      maxWidth: 480,
+      border: Border.all(color: AppColors.border),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 24),
-          Assets.images.gameLogo.image(width: 230),
-          const SizedBox(height: 40),
+          const MoovzLogo(width: 160),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
@@ -59,9 +58,7 @@ class GameInfoDialog extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => launchUrlString(Urls.howWeBuilt),
                       ),
-                      TextSpan(
-                        text: l10n.inFlutterAndGrabThe,
-                      ),
+                      TextSpan(text: l10n.inFlutterAndGrabThe),
                       TextSpan(
                         text: l10n.openSourceCode,
                         style: linkStyle,
@@ -72,10 +69,7 @@ class GameInfoDialog extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Text(
-                  l10n.otherLinks,
-                  style: bodyStyle,
-                ),
+                Text(l10n.otherLinks, style: bodyStyle),
                 const SizedBox(height: 16),
                 RichText(
                   text: TextSpan(
@@ -104,7 +98,7 @@ class GameInfoDialog extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 16),
         ],
       ),
     );

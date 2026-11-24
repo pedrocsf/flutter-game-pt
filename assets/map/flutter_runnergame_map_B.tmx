@@ -6,25 +6,12 @@
  <tileset firstgid="83" source="tiles/tile_plains_hills_v01.tsx"/>
  <tileset firstgid="161" source="objects/tile_plains_mountains_v01.tsx"/>
  <tileset firstgid="165" source="tiles/tile_decorations_v01.tsx"/>
- <tileset firstgid="180" source="anim/spritesheet_dash_run.tsx"/>
  <tileset firstgid="196" source="tiles/tile_plains_ground_v03.tsx"/>
- <tileset firstgid="364" source="anim/spritesheet_dash_deathDrown.tsx"/>
- <tileset firstgid="444" source="anim/spritesheet_phoenixDash_idle.tsx"/>
- <tileset firstgid="468" source="anim/spritesheet_dash_slide.tsx"/>
- <tileset firstgid="484" source="anim/spritesheet_dash_idle.tsx"/>
- <tileset firstgid="508" source="anim/spritesheet_phoenixDash_jump.tsx"/>
- <tileset firstgid="524" source="anim/spritesheet_dash_edgeGrab.tsx"/>
- <tileset firstgid="548" source="anim/spritesheet_dash_deathFaint.tsx"/>
- <tileset firstgid="572" source="anim/spritesheet_phoenixDash_run.tsx"/>
- <tileset firstgid="588" source="anim/spritesheet_phoenixDash_doublejump.tsx"/>
- <tileset firstgid="604" source="anim/spritesheet_dash_flap.tsx"/>
- <tileset firstgid="616" source="anim/spritesheet_dash_deathPit.tsx"/>
- <tileset firstgid="640" source="anim/spritesheet_dash_jump.tsx"/>
  <tileset firstgid="656" source="anim/spritesheet_poof.tsx"/>
- <tileset firstgid="676" source="anim/spritesheet_enemy_bee.tsx"/>
- <tileset firstgid="690" source="anim/spritesheet_item_egg.tsx"/>
- <tileset firstgid="738" source="anim/spritesheet_item_feather.tsx"/>
- <tileset firstgid="768" source="anim/spritesheet_enemy_grasshopper.tsx"/>
+ <tileset firstgid="676" source="anim/spritesheet_enemy_fatigue_hourglass.tsx"/>
+ <tileset firstgid="690" source="anim/spritesheet_item_medal.tsx"/>
+ <tileset firstgid="738" source="anim/spritesheet_item_zonefive.tsx"/>
+ <tileset firstgid="768" source="anim/spritesheet_enemy_ice_pack.tsx"/>
  <tileset firstgid="790" source="anim/spritesheet_poof_orange.tsx"/>
  <tileset firstgid="810" source="anim/spritesheet_fx_large.tsx"/>
  <tileset firstgid="824" source="anim/spritesheet_fx_small.tsx"/>
@@ -468,22 +455,22 @@
   <object id="679" gid="80" x="6784" y="2240" width="64" height="64"/>
   <object id="833" gid="690" x="3424" y="1856" width="64" height="64">
    <properties>
-    <property name="Type" value="Egg"/>
+    <property name="Type" value="Medal"/>
    </properties>
   </object>
   <object id="834" gid="690" x="5184" y="1280" width="64" height="64">
    <properties>
-    <property name="Type" value="Egg"/>
+    <property name="Type" value="Medal"/>
    </properties>
   </object>
   <object id="835" gid="690" x="6496" y="2176" width="64" height="64">
    <properties>
-    <property name="Type" value="Egg"/>
+    <property name="Type" value="Medal"/>
    </properties>
   </object>
   <object id="836" gid="738" x="3136" y="1984" width="64" height="64">
    <properties>
-    <property name="Type" value="Feather"/>
+    <property name="Type" value="ZoneFive"/>
    </properties>
   </object>
   <object id="845" gid="824" x="768" y="1728" width="64" height="64"/>
@@ -495,64 +482,64 @@
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="{10L}"/>
-    <property name="Type" value="Bee"/>
+    <property name="Type" value="FatigueHourglass"/>
    </properties>
   </object>
   <object id="830" gid="676" x="5632" y="1152" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="{10L}"/>
-    <property name="Type" value="Bee"/>
+    <property name="Type" value="FatigueHourglass"/>
    </properties>
   </object>
   <object id="831" gid="676" x="6656" y="1408" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="{10L}"/>
-    <property name="Type" value="Bee"/>
+    <property name="Type" value="FatigueHourglass"/>
    </properties>
   </object>
   <object id="832" gid="676" x="7616" y="1664" width="64" height="64">
    <properties>
     <property name="Fly" type="bool" value="true"/>
     <property name="Path" value="{10L}"/>
-    <property name="Type" value="Bee"/>
+    <property name="Type" value="FatigueHourglass"/>
    </properties>
   </object>
   <object id="837" gid="768" x="3584" y="2240" width="64" height="64">
    <properties>
     <property name="Path" value="I{2L,2R}"/>
-    <property name="Type" value="Grasshopper"/>
+    <property name="Type" value="IcePack"/>
    </properties>
   </object>
   <object id="840" gid="768" x="4736" y="2176" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Grasshopper"/>
+    <property name="Type" value="IcePack"/>
    </properties>
   </object>
   <object id="841" gid="768" x="5312" y="2240" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Grasshopper"/>
+    <property name="Type" value="IcePack"/>
    </properties>
   </object>
   <object id="842" gid="768" x="6720" y="1152" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Grasshopper"/>
+    <property name="Type" value="IcePack"/>
    </properties>
   </object>
   <object id="843" gid="768" x="7296" y="2240" width="64" height="64">
    <properties>
     <property name="Path" value="I{1L, 1R}"/>
-    <property name="Type" value="Grasshopper"/>
+    <property name="Type" value="IcePack"/>
    </properties>
   </object>
   <object id="844" gid="768" x="7808" y="2112" width="64" height="64">
    <properties>
     <property name="Path" value="I{2L, 2R}"/>
-    <property name="Type" value="Grasshopper"/>
+    <property name="Type" value="IcePack"/>
    </properties>
   </object>
  </objectgroup>
@@ -601,21 +588,5 @@
   <object id="767" type="Respawn" x="7104" y="1344">
    <point/>
   </object>
- </objectgroup>
- <objectgroup id="45" name="Dash" visible="0">
-  <object id="814" gid="180" x="640" y="2240" width="64" height="64"/>
-  <object id="815" gid="364" x="192" y="2240" width="64" height="64"/>
-  <object id="816" gid="548" x="256" y="2240" width="64" height="64"/>
-  <object id="817" gid="616" x="320" y="2240" width="64" height="64"/>
-  <object id="818" gid="524" x="384" y="2240" width="64" height="64"/>
-  <object id="819" gid="604" x="448" y="2240" width="64" height="64"/>
-  <object id="820" gid="484" x="512" y="2240" width="64" height="64"/>
-  <object id="821" gid="640" x="576" y="2240" width="64" height="64"/>
-  <object id="822" gid="468" x="704" y="2240" width="64" height="64"/>
-  <object id="823" gid="588" x="768" y="2240" width="64" height="64"/>
-  <object id="824" gid="444" x="832" y="2240" width="64" height="64"/>
-  <object id="825" gid="508" x="896" y="2304" width="64" height="128"/>
-  <object id="826" gid="572" x="960" y="2240" width="64" height="64"/>
-  <object id="827" gid="656" x="448" y="2304" width="192" height="192"/>
  </objectgroup>
 </map>

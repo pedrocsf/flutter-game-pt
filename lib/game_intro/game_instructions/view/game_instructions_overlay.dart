@@ -4,10 +4,10 @@ import 'package:app_ui/app_ui.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_dash/game_intro/game_intro.dart';
-import 'package:super_dash/gen/assets.gen.dart';
-import 'package:super_dash/l10n/l10n.dart';
-import 'package:super_dash/utils/utils.dart';
+import 'package:moovz_dash/game_intro/game_intro.dart';
+import 'package:moovz_dash/gen/assets.gen.dart';
+import 'package:moovz_dash/l10n/l10n.dart';
+import 'package:moovz_dash/utils/utils.dart';
 
 class GameInstruction extends Equatable {
   const GameInstruction({
@@ -44,6 +44,12 @@ class GameInstructionsOverlay extends StatelessWidget {
     );
   }
 }
+
+const double _dialogMaxWidth = 640;
+const double _pageHeight = 190;
+const double _imageSize = 160;
+const double _imageGap = 24;
+const double _controlsGap = 8;
 
 class GameInstructionsOverlayView extends StatefulWidget {
   const GameInstructionsOverlayView({super.key});
@@ -115,6 +121,7 @@ class _GameInstructionsOverlayViewState
   @override
   Widget build(BuildContext context) {
     return AppDialog(
+      maxWidth: _dialogMaxWidth,
       border: Border.all(color: Colors.white24),
       backgroundColor: Colors.white24,
       imageProvider: Assets.images.instructionsBackground.provider(),
@@ -122,8 +129,7 @@ class _GameInstructionsOverlayViewState
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: 390,
-            height: 400,
+            height: _pageHeight,
             child: PageView.builder(
               controller: pageController,
               onPageChanged: context.read<GameInstructionsCubit>().updateStep,
@@ -139,11 +145,8 @@ class _GameInstructionsOverlayViewState
               },
             ),
           ),
-          const SizedBox(height: 24),
-          GameInstructionNavigationControls(
-            pageController: pageController,
-          ),
-          const SizedBox(height: 16),
+          const SizedBox(height: _controlsGap),
+          GameInstructionNavigationControls(pageController: pageController),
         ],
       ),
     );
@@ -166,29 +169,31 @@ class _CardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
+    return Row(
       children: [
         _CardImage(assetPath: assetPath),
-        const SizedBox(height: 24),
-        Text(
-          title,
-          style: theme.textTheme.headlineSmall?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 12),
+        const SizedBox(width: _imageGap),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-            ),
-            child: Text(
-              description,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: Colors.white,
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  description,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -205,23 +210,21 @@ class _CardImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 224,
-      height: 224,
+      width: _imageSize,
+      height: _imageSize,
       child: TraslucentBackground(
-        border: Border.all(
-          color: Colors.white,
-        ),
+        border: Border.all(color: Colors.white),
         gradient: const [
-          Color(0xFFB1B1B1),
-          Color(0xFF363567),
-          Color(0xFFE2F8FA),
+          AppColors.onSurfaceMuted,
+          AppColors.surface,
+          AppColors.onSurface,
           Colors.white38,
         ],
         child: Positioned.fill(
           child: Image.asset(
             assetPath,
-            width: 190,
-            height: 190,
+            width: _imageSize - 30,
+            height: _imageSize - 30,
           ),
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:app_ui/src/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 /// {@template traslucent_background}
@@ -29,19 +30,30 @@ class TraslucentBackground extends StatelessWidget {
   /// The colors gradient to use for the button.
   final List<Color> gradient;
 
+  static const _backgroundAlpha = 0.6;
+
+  static const _gradientOpacity = 0.4;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Positioned.fill(
-          child: Opacity(
-            opacity: 0.4,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                shape: shape,
-                border: border,
-                borderRadius: borderRadius,
-                gradient: LinearGradient(colors: gradient),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              shape: shape,
+              border: border,
+              borderRadius: borderRadius,
+              color: AppColors.background.withValues(alpha: _backgroundAlpha),
+            ),
+            child: Opacity(
+              opacity: _gradientOpacity,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: shape,
+                  borderRadius: borderRadius,
+                  gradient: LinearGradient(colors: gradient),
+                ),
               ),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:app_ui/src/theme/app_colors.dart';
 import 'package:app_ui/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -36,13 +37,13 @@ class GameIconButton extends StatelessWidget {
 
   static const _defaultGradient = LinearGradient(
     colors: [
-      Color(0xFFB1B1B1),
-      Color(0xFF363567),
+      AppColors.surface,
+      AppColors.background,
     ],
   );
 
   static final _defaultBorder = Border.all(
-    color: Colors.white,
+    color: AppColors.onSurface,
   );
 
   @override
@@ -61,7 +62,7 @@ class GameIconButton extends StatelessWidget {
           child: Icon(
             icon,
             size: size ?? 24,
-            color: Colors.white,
+            color: AppColors.onSurface,
           ),
         ),
       ),

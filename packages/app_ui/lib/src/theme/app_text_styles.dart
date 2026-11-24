@@ -28,7 +28,7 @@ class AppTextStyles {
   );
 
   static const TextStyle _commonStyle = TextStyle(
-    fontFamily: 'Google Sans',
+    fontFamily: 'DM Sans',
     color: Colors.white,
     package: package,
     decorationColor: Colors.white,
@@ -63,9 +63,9 @@ class AppTextStyles {
 
   /// Body large text style.
   static TextStyle get bodyLarge => _commonStyle.copyWith(
-        fontSize: 16,
-        height: 1.5,
-      );
+    fontSize: 16,
+    height: 1.5,
+  );
 
   /// Body medium text style.
   static TextStyle get bodyMedium => _commonStyle;

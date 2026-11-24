@@ -3,7 +3,7 @@ part of 'game_instructions_cubit.dart';
 enum GameInstructionsStep {
   autoRun,
   tapToJump,
-  collectEggsAndAcorns,
+  collectMedalsAndEnergy,
   powerfulWings,
   levelGates,
   avoidBugs,

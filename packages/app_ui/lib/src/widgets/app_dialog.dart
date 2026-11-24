@@ -9,22 +9,28 @@ class AppDialog extends StatelessWidget {
   const AppDialog({
     required this.child,
     this.showCloseButton = true,
-    this.backgroundColor = const Color(0xE51B1B36),
+    this.backgroundColor = AppColors.surfaceDialog,
     this.gradient = const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Color.fromARGB(81, 177, 177, 177),
-        Color.fromARGB(51, 54, 53, 103),
-        Color.fromARGB(230, 27, 27, 54),
+        AppColors.surface,
+        AppColors.surfaceDialog,
+        AppColors.background,
       ],
       stops: [0.05, 0.5, 1],
     ),
     this.borderRadius = const BorderRadius.all(Radius.circular(24)),
-    this.border,
+    this.border = const Border.fromBorderSide(
+      BorderSide(color: AppColors.border),
+    ),
     this.imageProvider,
+    this.maxWidth = AppCard.defaultMaxWidth,
     super.key,
   });
+
+  /// The maximum width of the dialog card.
+  final double maxWidth;
 
   /// The content of the dialog.
   final Widget child;
@@ -60,6 +66,7 @@ class AppDialog extends StatelessWidget {
         backgroundColor: backgroundColor,
         borderRadius: borderRadius,
         imageProvider: imageProvider,
+        maxWidth: maxWidth,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,

@@ -1,4 +1,4 @@
-package com.verygoodventures.super_dash
+package com.moovz.moovz_dash
 
 import io.flutter.embedding.android.FlutterActivity
 
