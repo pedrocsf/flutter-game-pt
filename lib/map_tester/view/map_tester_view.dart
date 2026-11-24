@@ -5,10 +5,10 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_dash/filesytem_asset_bundle/filesystem_asset_bundle.dart';
-import 'package:super_dash/game/game.dart';
-import 'package:super_dash/map_tester/map_tester.dart';
-import 'package:super_dash/settings/settings_controller.dart';
+import 'package:moovz_dash/filesytem_asset_bundle/filesystem_asset_bundle.dart';
+import 'package:moovz_dash/game/game.dart';
+import 'package:moovz_dash/map_tester/map_tester.dart';
+import 'package:moovz_dash/settings/settings_controller.dart';
 
 typedef GetDirectoryPath = Future<String?> Function();
 
@@ -31,7 +31,7 @@ class MapTesterView extends StatefulWidget {
 }
 
 class _MapTesterViewState extends State<MapTesterView> {
-  SuperDashGame? game;
+  MoovzDashGame? game;
   String? rootPath;
 
   double? speed;
@@ -53,7 +53,7 @@ class _MapTesterViewState extends State<MapTesterView> {
       if (directory != null) {
         setState(() {
           rootPath = directory;
-          game = SuperDashGame(
+          game = MoovzDashGame(
             gameBloc: GameBloc(),
             customBundle: FileSystemAssetBundle(directory),
             audioController: context.read(),
@@ -63,7 +63,7 @@ class _MapTesterViewState extends State<MapTesterView> {
       }
     } else {
       setState(() {
-        game = SuperDashGame(
+        game = MoovzDashGame(
           gameBloc: GameBloc(),
           audioController: context.read(),
           inMapTester: true,
@@ -73,16 +73,16 @@ class _MapTesterViewState extends State<MapTesterView> {
   }
 
   Future<void> _reload() async {
-    late SuperDashGame newGame;
+    late MoovzDashGame newGame;
     if (!kIsWeb && Platform.isMacOS) {
-      newGame = SuperDashGame(
+      newGame = MoovzDashGame(
         gameBloc: GameBloc(),
         audioController: context.read(),
         customBundle: FileSystemAssetBundle(rootPath!),
         inMapTester: true,
       );
     } else {
-      newGame = SuperDashGame(
+      newGame = MoovzDashGame(
         gameBloc: GameBloc(),
         audioController: context.read(),
         inMapTester: true,
@@ -107,7 +107,7 @@ class _MapTesterViewState extends State<MapTesterView> {
 
   void _updateSpeed(double value) {
     setState(() {
-      final newValue = (speed ?? Player.speed) + value;
+      final newValue = (speed ?? GameDifficulty.medium.playerSpeed) + value;
       speed = newValue;
       _setSpeed(newValue);
     });
@@ -143,10 +143,7 @@ class _MapTesterViewState extends State<MapTesterView> {
             ),
             const SizedBox(height: 16),
             if (game == null)
-              ElevatedButton(
-                onPressed: _createGame,
-                child: const Text('Load'),
-              )
+              ElevatedButton(onPressed: _createGame, child: const Text('Load'))
             else
               Column(
                 children: [
@@ -282,16 +279,14 @@ class _MapTesterViewState extends State<MapTesterView> {
 }
 
 class _SpeedLabel extends StatelessWidget {
-  const _SpeedLabel({
-    required this.speed,
-  });
+  const _SpeedLabel({required this.speed});
 
   final double? speed;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      '${(speed ?? Player.speed).toStringAsFixed(2)}'
+      '${(speed ?? GameDifficulty.medium.playerSpeed).toStringAsFixed(2)}'
       ' (Tiles per second)',
       style: const TextStyle(color: Colors.black),
     );
@@ -299,9 +294,7 @@ class _SpeedLabel extends StatelessWidget {
 }
 
 class _JumpImpulseLabel extends StatelessWidget {
-  const _JumpImpulseLabel({
-    required this.jumpImpulse,
-  });
+  const _JumpImpulseLabel({required this.jumpImpulse});
 
   final double? jumpImpulse;
 

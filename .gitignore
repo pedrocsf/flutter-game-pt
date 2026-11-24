@@ -127,3 +127,4 @@ app.*.map.json
 .firebase
 
 secrets
+CONTEXTO.md
