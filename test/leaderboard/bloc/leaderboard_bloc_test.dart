@@ -4,7 +4,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:super_dash/leaderboard/bloc/leaderboard_bloc.dart';
+import 'package:moovz_dash/game/game.dart';
+import 'package:moovz_dash/leaderboard/bloc/leaderboard_bloc.dart';
 
 class _MockLeaderboardRepository extends Mock
     implements LeaderboardRepository {}
@@ -33,13 +34,14 @@ void main() {
       'emits [LeaderboardLoading, LeaderboardLoaded] '
       'when LeaderboardTop10Requested is added and repository returns data',
       setUp: () {
-        when(leaderboardRepository.fetchTop10Leaderboard).thenAnswer(
-          (_) async => [leaderboardEntryData],
-        );
+        when(
+          () => leaderboardRepository.fetchTop10Leaderboard(
+            difficultyKey: any(named: 'difficultyKey'),
+          ),
+        ).thenAnswer((_) async => [leaderboardEntryData]);
       },
-      build: () => LeaderboardBloc(
-        leaderboardRepository: leaderboardRepository,
-      ),
+      build: () =>
+          LeaderboardBloc(leaderboardRepository: leaderboardRepository),
       act: (bloc) => bloc.add(LeaderboardTop10Requested()),
       expect: () => [
         LeaderboardLoading(),
@@ -48,21 +50,48 @@ void main() {
     );
 
     blocTest<LeaderboardBloc, LeaderboardState>(
+      'fetches the leaderboard of the requested difficulty',
+      setUp: () {
+        when(
+          () => leaderboardRepository.fetchTop10Leaderboard(
+            difficultyKey: any(named: 'difficultyKey'),
+          ),
+        ).thenAnswer((_) async => [leaderboardEntryData]);
+      },
+      build: () =>
+          LeaderboardBloc(leaderboardRepository: leaderboardRepository),
+      act: (bloc) =>
+          bloc.add(LeaderboardTop10Requested(difficulty: GameDifficulty.hard)),
+      expect: () => [
+        LeaderboardLoading(),
+        LeaderboardLoaded(
+          difficulty: GameDifficulty.hard,
+          entries: [leaderboardEntryData],
+        ),
+      ],
+      verify: (_) {
+        verify(
+          () => leaderboardRepository.fetchTop10Leaderboard(
+            difficultyKey: 'hard',
+          ),
+        ).called(1);
+      },
+    );
+
+    blocTest<LeaderboardBloc, LeaderboardState>(
       'emits [LeaderboardLoading, LeaderboardError] '
       'when LeaderboardTop10Requested is added and repository fails',
       setUp: () {
         when(
-          leaderboardRepository.fetchTop10Leaderboard,
+          () => leaderboardRepository.fetchTop10Leaderboard(
+            difficultyKey: any(named: 'difficultyKey'),
+          ),
         ).thenThrow(Exception());
       },
-      build: () => LeaderboardBloc(
-        leaderboardRepository: leaderboardRepository,
-      ),
+      build: () =>
+          LeaderboardBloc(leaderboardRepository: leaderboardRepository),
       act: (bloc) => bloc.add(LeaderboardTop10Requested()),
-      expect: () => [
-        LeaderboardLoading(),
-        LeaderboardError(),
-      ],
+      expect: () => [LeaderboardLoading(), LeaderboardError()],
     );
   });
 }

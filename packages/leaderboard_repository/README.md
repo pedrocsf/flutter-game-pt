@@ -4,7 +4,7 @@
 [![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)](https://github.com/felangel/mason)
 [![License: MIT][license_badge]][license_link]
 
-A repository to access leaderboard data in Firebase Cloud Firestore.
+A repository to access the Moovz Dash leaderboard stored locally on the device with `shared_preferences`.
 
 ## Installation 💻
 

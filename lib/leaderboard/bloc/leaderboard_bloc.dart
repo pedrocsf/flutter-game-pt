@@ -1,15 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:leaderboard_repository/leaderboard_repository.dart';
+import 'package:moovz_dash/game/game.dart';
 
 part 'leaderboard_event.dart';
 part 'leaderboard_state.dart';
 
 class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
-  LeaderboardBloc({
-    required LeaderboardRepository leaderboardRepository,
-  })  : _leaderboardRepository = leaderboardRepository,
-        super(const LeaderboardInitial()) {
+  LeaderboardBloc({required LeaderboardRepository leaderboardRepository})
+    : _leaderboardRepository = leaderboardRepository,
+      super(const LeaderboardInitial()) {
     on<LeaderboardTop10Requested>(_onLeaderboardRequested);
   }
 
@@ -21,8 +21,12 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
   ) async {
     try {
       emit(const LeaderboardLoading());
-      final leaderboard = await _leaderboardRepository.fetchTop10Leaderboard();
-      emit(LeaderboardLoaded(entries: leaderboard));
+      final leaderboard = await _leaderboardRepository.fetchTop10Leaderboard(
+        difficultyKey: event.difficulty.storageKey,
+      );
+      emit(
+        LeaderboardLoaded(difficulty: event.difficulty, entries: leaderboard),
+      );
     } catch (e) {
       emit(const LeaderboardError());
     }

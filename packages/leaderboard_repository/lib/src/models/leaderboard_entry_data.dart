@@ -4,16 +4,16 @@ import 'package:json_annotation/json_annotation.dart';
 part 'leaderboard_entry_data.g.dart';
 
 /// {@template leaderboard_entry_data}
-/// A model representing a leaderboard entry containing the player's initials,
-/// score, and chosen character.
+/// A model representing a leaderboard entry containing the player's nickname
+/// and score.
 ///
-/// Stored in Firestore `leaderboard` collection.
+/// Stored locally on the device as part of the leaderboard list.
 ///
 /// Example:
 /// ```json
 /// {
-///   "playerInitials" : "ABC",
-///   "score" : 1500,
+///   "playerNickname" : "Dash",
+///   "score" : 1500
 /// }
 /// ```
 /// {@endtemplate}
@@ -21,7 +21,7 @@ part 'leaderboard_entry_data.g.dart';
 class LeaderboardEntryData extends Equatable {
   /// {@macro leaderboard_entry_data}
   const LeaderboardEntryData({
-    required this.playerInitials,
+    required this.playerNickname,
     required this.score,
   });
 
@@ -33,11 +33,11 @@ class LeaderboardEntryData extends Equatable {
   /// Converts the [LeaderboardEntryData] to [Map].
   Map<String, dynamic> toJson() => _$LeaderboardEntryDataToJson(this);
 
-  /// Player's chosen initials for [LeaderboardEntryData].
+  /// Player's chosen nickname for [LeaderboardEntryData].
   ///
-  /// Example: 'ABC'.
-  @JsonKey(name: 'playerInitials')
-  final String playerInitials;
+  /// Example: 'Dash'.
+  @JsonKey(name: 'playerNickname')
+  final String playerNickname;
 
   /// Score for [LeaderboardEntryData].
   ///
@@ -46,11 +46,8 @@ class LeaderboardEntryData extends Equatable {
   final int score;
 
   /// An empty [LeaderboardEntryData] object.
-  static const empty = LeaderboardEntryData(
-    score: 0,
-    playerInitials: '',
-  );
+  static const empty = LeaderboardEntryData(score: 0, playerNickname: '');
 
   @override
-  List<Object?> get props => [playerInitials, score];
+  List<Object?> get props => [playerNickname, score];
 }

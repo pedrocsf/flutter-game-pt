@@ -1,13 +1,8 @@
 part of 'score_bloc.dart';
 
-enum ScoreStatus {
-  gameOver,
-  inputInitials,
-  scoreOverview,
-  leaderboard,
-}
+enum ScoreStatus { gameOver, inputNickname, scoreOverview, leaderboard }
 
-enum InitialsFormStatus {
+enum NicknameFormStatus {
   initial,
   loading,
   success,
@@ -19,26 +14,29 @@ enum InitialsFormStatus {
 class ScoreState extends Equatable {
   const ScoreState({
     this.status = ScoreStatus.gameOver,
-    this.initials = const ['', '', ''],
-    this.initialsStatus = InitialsFormStatus.initial,
+    this.nickname = '',
+    this.nicknameStatus = NicknameFormStatus.initial,
+    this.difficulty = GameDifficulty.medium,
   });
 
   final ScoreStatus status;
-  final List<String> initials;
-  final InitialsFormStatus initialsStatus;
+  final String nickname;
+  final NicknameFormStatus nicknameStatus;
+  final GameDifficulty difficulty;
 
   ScoreState copyWith({
     ScoreStatus? status,
-    List<String>? initials,
-    InitialsFormStatus? initialsStatus,
+    String? nickname,
+    NicknameFormStatus? nicknameStatus,
   }) {
     return ScoreState(
       status: status ?? this.status,
-      initials: initials ?? this.initials,
-      initialsStatus: initialsStatus ?? this.initialsStatus,
+      nickname: nickname ?? this.nickname,
+      nicknameStatus: nicknameStatus ?? this.nicknameStatus,
+      difficulty: difficulty,
     );
   }
 
   @override
-  List<Object> get props => [status, initials, initialsStatus];
+  List<Object> get props => [status, nickname, nicknameStatus, difficulty];
 }

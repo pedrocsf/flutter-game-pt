@@ -3,14 +3,11 @@ import 'package:leaderboard_repository/leaderboard_repository.dart';
 
 void main() {
   group('LeaderboardEntry', () {
-    const data = <String, dynamic>{
-      'score': 1500,
-      'playerInitials': 'ABC',
-    };
+    const data = <String, dynamic>{'score': 1500, 'playerNickname': 'ABC'};
 
     const leaderboardEntry = LeaderboardEntryData(
       score: 1500,
-      playerInitials: 'ABC',
+      playerNickname: 'ABC',
     );
 
     test('can be instantiated', () {

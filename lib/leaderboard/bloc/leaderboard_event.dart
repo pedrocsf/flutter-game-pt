@@ -8,5 +8,10 @@ sealed class LeaderboardEvent extends Equatable {
 }
 
 class LeaderboardTop10Requested extends LeaderboardEvent {
-  const LeaderboardTop10Requested();
+  const LeaderboardTop10Requested({this.difficulty = GameDifficulty.medium});
+
+  final GameDifficulty difficulty;
+
+  @override
+  List<Object> get props => [difficulty];
 }

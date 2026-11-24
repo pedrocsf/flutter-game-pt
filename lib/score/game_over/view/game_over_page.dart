@@ -3,27 +3,29 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:super_dash/game/game.dart';
-import 'package:super_dash/game_intro/game_intro.dart';
-import 'package:super_dash/gen/assets.gen.dart';
-import 'package:super_dash/l10n/l10n.dart';
-import 'package:super_dash/score/score.dart';
-import 'package:super_dash/utils/utils.dart';
+import 'package:moovz_dash/game/game.dart';
+import 'package:moovz_dash/gen/assets.gen.dart';
+import 'package:moovz_dash/l10n/l10n.dart';
+import 'package:moovz_dash/score/score.dart';
+import 'package:moovz_dash/utils/utils.dart';
+
+const double _horizontalPadding = 32;
+const double _verticalPadding = 8;
+const double _logoWidth = 160;
+const double _gap = 12;
 
 class GameOverPage extends StatelessWidget {
   const GameOverPage({super.key});
 
   static Page<void> page() {
-    return const MaterialPage(
-      child: GameOverPage(),
-    );
+    return const MaterialPage(child: GameOverPage());
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
-    const titleColor = Color(0xFF18274C);
+    const titleColor = AppColors.onSurface;
 
     return PageWithBackground(
       background: const GameBackground(),
@@ -32,61 +34,90 @@ class GameOverPage extends StatelessWidget {
           image: DecorationImage(
             image: Assets.images.gameOverBg.provider(),
             fit: BoxFit.cover,
-            alignment:
-                isDesktop ? const Alignment(0, -.5) : Alignment.topCenter,
+            alignment: isDesktop
+                ? const Alignment(0, -.5)
+                : Alignment.topCenter,
           ),
         ),
-        child: Column(
-          children: [
-            const Spacer(flex: 15),
-            Text(
-              l10n.gameOver,
-              style: textTheme.headlineMedium?.copyWith(
-                color: titleColor,
-                fontWeight: FontWeight.bold,
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) => SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: _horizontalPadding,
+                    vertical: _verticalPadding,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const MoovzLogo(width: _logoWidth),
+                            const SizedBox(height: _gap),
+                            Text(
+                              l10n.gameOver,
+                              style: textTheme.headlineMedium?.copyWith(
+                                color: titleColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              l10n.betterLuckNextTime,
+                              style: textTheme.bodyLarge?.copyWith(
+                                color: titleColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              l10n.totalScore,
+                              style: textTheme.bodyLarge?.copyWith(
+                                color: titleColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: _gap),
+                            const _ScoreWidget(),
+                            const SizedBox(height: _gap),
+                            GameElevatedButton(
+                              label: l10n.submitScore,
+                              onPressed: () {
+                                context.read<ScoreBloc>().add(
+                                  const ScoreSubmitted(),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: _gap),
+                            GameElevatedButton.icon(
+                              label: l10n.playAgain,
+                              icon: const Icon(Icons.refresh, size: 16),
+                              onPressed: context.flow<ScoreState>().complete,
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  AppColors.surface,
+                                  AppColors.background,
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-            Text(
-              l10n.betterLuckNextTime,
-              style: textTheme.bodyLarge?.copyWith(
-                color: titleColor,
-              ),
-            ),
-            const Spacer(flex: 4),
-            Text(
-              l10n.totalScore,
-              style: textTheme.bodyLarge?.copyWith(
-                color: titleColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Spacer(flex: 2),
-            const _ScoreWidget(),
-            const Spacer(flex: 4),
-            GameElevatedButton(
-              label: l10n.submitScore,
-              onPressed: () {
-                context.read<ScoreBloc>().add(const ScoreSubmitted());
-              },
-            ),
-            const Spacer(flex: 3),
-            GameElevatedButton.icon(
-              label: l10n.playAgain,
-              icon: const Icon(Icons.refresh, size: 16),
-              onPressed: context.flow<ScoreState>().complete,
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFA6C3DF),
-                  Color(0xFF79AACA),
-                ],
-              ),
-            ),
-            const Spacer(flex: 40),
-            const BottomBar(),
-            const SizedBox(height: 16),
-          ],
+          ),
         ),
       ),
     );
@@ -108,10 +139,7 @@ class _ScoreWidget extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0x80EAFFFE),
-            Color(0x80C9D9F1),
-          ],
+          colors: [AppColors.surface, AppColors.background],
         ),
         borderRadius: BorderRadius.circular(100),
       ),
@@ -123,15 +151,12 @@ class _ScoreWidget extends StatelessWidget {
           RichText(
             text: TextSpan(
               style: textTheme.headlineMedium?.copyWith(
-                color: const Color(0xFF4D5B92),
+                color: AppColors.onSurface,
                 fontWeight: FontWeight.bold,
               ),
               children: [
                 TextSpan(text: '${formatScore(score)} '),
-                TextSpan(
-                  text: l10n.pts,
-                  style: const TextStyle(fontSize: 24),
-                ),
+                TextSpan(text: l10n.pts, style: const TextStyle(fontSize: 24)),
               ],
             ),
           ),
