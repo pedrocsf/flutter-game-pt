@@ -5,8 +5,8 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leap/leap.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:moovz_dash/game/game.dart';
 import 'package:pathxp/pathxp.dart';
-import 'package:super_dash/game/game.dart';
 
 class _MockSprite extends Mock implements Sprite {}
 
@@ -30,8 +30,8 @@ void main() {
         final sequenceEffects = parent.children.whereType<SequenceEffect>();
         expect(sequenceEffects, hasLength(1));
 
-        final moveEffects =
-            sequenceEffects.first.children.whereType<MoveEffect>();
+        final moveEffects = sequenceEffects.first.children
+            .whereType<MoveEffect>();
 
         expect(moveEffects, hasLength(2));
 
@@ -54,8 +54,8 @@ void main() {
         final sequenceEffects = parent.children.whereType<SequenceEffect>();
         expect(sequenceEffects, hasLength(1));
 
-        final moveEffects =
-            sequenceEffects.first.children.whereType<MoveEffect>();
+        final moveEffects = sequenceEffects.first.children
+            .whereType<MoveEffect>();
 
         expect(moveEffects, hasLength(2));
 
