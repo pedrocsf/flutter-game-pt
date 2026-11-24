@@ -1,7 +1,11 @@
+export 'avatar/avatar.dart';
 export 'behaviors/behaviors.dart';
 export 'bloc/game_bloc.dart';
 export 'components/components.dart';
+export 'difficulty/difficulty.dart';
 export 'entities/entities.dart';
-export 'super_dash_game.dart';
+export 'input/input.dart';
+export 'moovz_dash_game.dart';
+export 'procedural/procedural.dart';
 export 'view/view.dart';
 export 'widgets/widgets.dart';

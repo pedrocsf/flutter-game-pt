@@ -2,17 +2,14 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:super_dash/game/super_dash_game.dart';
+import 'package:moovz_dash/game/moovz_dash_game.dart';
 
-typedef TreeHouseFrontRender = void Function(
-  Canvas canvas,
-  CameraComponent camera,
-);
+typedef TreeHouseFrontRender =
+    void Function(Canvas canvas, CameraComponent camera);
 
-class TreeHouseFront extends PositionComponent with HasGameRef<SuperDashGame> {
-  TreeHouseFront({
-    required this.renderFront,
-  }) : super(priority: 1000, position: Vector2(0, 0));
+class TreeHouseFront extends PositionComponent with HasGameRef<MoovzDashGame> {
+  TreeHouseFront({required this.renderFront})
+    : super(priority: 1000, position: Vector2(0, 0));
 
   final TreeHouseFrontRender renderFront;
 

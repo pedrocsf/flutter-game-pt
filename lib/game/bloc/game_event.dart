@@ -37,3 +37,20 @@ final class GameSectionCompleted extends GameEvent {
   @override
   List<Object> get props => [sectionCount];
 }
+
+final class GameLifeLost extends GameEvent {
+  const GameLifeLost();
+}
+
+final class GameLifeGained extends GameEvent {
+  const GameLifeGained();
+}
+
+final class GameSpecialItemCollected extends GameEvent {
+  const GameSpecialItemCollected(this.itemType);
+
+  final ItemType itemType;
+
+  @override
+  List<Object> get props => [itemType];
+}

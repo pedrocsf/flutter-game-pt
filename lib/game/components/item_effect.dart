@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:super_dash/game/game.dart';
+import 'package:moovz_dash/game/game.dart';
 
 class ItemEffect extends SpriteAnimationComponent
-    with HasGameRef<SuperDashGame> {
-  ItemEffect({
-    required this.type,
-    super.position,
-  }) : super(removeOnFinish: true, priority: 22);
+    with HasGameRef<MoovzDashGame> {
+  ItemEffect({required this.type, super.position})
+    : super(removeOnFinish: true, priority: 22);
 
   final ItemType type;
 
@@ -16,7 +14,7 @@ class ItemEffect extends SpriteAnimationComponent
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    if (type == ItemType.egg) {
+    if (type == ItemType.medal || type == ItemType.extraLife) {
       animation = await gameRef.loadSpriteAnimation(
         'anim/spritesheet_fx_large.png',
         SpriteAnimationData.sequenced(
@@ -29,7 +27,7 @@ class ItemEffect extends SpriteAnimationComponent
       );
       size = Vector2.all(192);
       anchor = Anchor.center;
-    } else if (type == ItemType.goldenFeather) {
+    } else if (type == ItemType.zoneFive) {
       animation = await gameRef.loadSpriteAnimation(
         'anim/spritesheet_poof_orange.png',
         SpriteAnimationData.sequenced(

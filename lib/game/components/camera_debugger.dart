@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CameraDebugger extends RectangleComponent {
-  CameraDebugger({
-    super.position,
-  }) : super(
-          paint: Paint()..color = Colors.pink.withOpacity(0.5),
-          size: Vector2.all(150),
-          priority: 100,
-          anchor: Anchor.center,
-        );
+  CameraDebugger({super.position})
+    : super(
+        paint: Paint()..color = Colors.pink.withOpacity(0.5),
+        size: Vector2.all(150),
+        priority: 100,
+        anchor: Anchor.center,
+      );
 
   final _direction = Vector2.zero();
   late final TextComponent _text;
@@ -26,7 +25,8 @@ class CameraDebugger extends RectangleComponent {
 
     position += _direction * _speed * dt;
 
-    _text.text = 'X: ${position.x.toStringAsFixed(2)}'
+    _text.text =
+        'X: ${position.x.toStringAsFixed(2)}'
         '\nY: ${position.y.toStringAsFixed(2)}'
         '\nSpeed: $speed';
   }
@@ -35,12 +35,7 @@ class CameraDebugger extends RectangleComponent {
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    add(
-      _text = TextComponent(
-        anchor: Anchor.center,
-        position: size / 2,
-      ),
-    );
+    add(_text = TextComponent(anchor: Anchor.center, position: size / 2));
 
     add(
       KeyboardListenerComponent(

@@ -4,28 +4,31 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
-import 'package:super_dash/game/game.dart';
+import 'package:moovz_dash/game/game.dart';
 
 enum DashState {
   idle,
   running,
 
-  phoenixIdle,
-  phoenixRunning,
+  zoneFiveIdle,
+  zoneFiveRunning,
 
   deathPit,
   deathFaint,
 
   jump,
-  phoenixJump,
+  zoneFiveJump,
 
-  phoenixDoubleJump,
+  zoneFiveDoubleJump,
+
+  slide,
+  zoneFiveSlide,
 }
 
 class PlayerStateBehavior extends Behavior<Player> {
   DashState? _state;
 
-  late final Map<DashState, PositionComponent> _stateMap;
+  late final Map<DashState, AvatarSpriteComponent> _stateMap;
 
   DashState get state => _state ?? DashState.idle;
 
@@ -33,24 +36,35 @@ class PlayerStateBehavior extends Behavior<Player> {
     DashState.deathPit,
     DashState.deathFaint,
     DashState.jump,
-    DashState.phoenixJump,
-    DashState.phoenixDoubleJump,
+    DashState.zoneFiveJump,
+    DashState.zoneFiveDoubleJump,
   };
 
   void updateSpritePaintColor(Color color) {
     for (final component in _stateMap.values) {
-      if (component is HasPaint) {
-        (component as HasPaint).paint.color = color;
-      }
+      component.setColor(color);
+    }
+  }
+
+  void setOpacity(double opacity) {
+    for (final component in _stateMap.values) {
+      component.opacity = opacity;
+    }
+  }
+
+  void syncAvatarPositions() {
+    for (final component in _stateMap.values) {
+      component.position = _avatarPosition(component.size);
     }
   }
 
   void fadeOut({VoidCallback? onComplete}) {
     final component = _stateMap[state];
-    if (component != null && component is HasPaint) {
+    if (component != null) {
       component.add(
         OpacityEffect.fadeOut(
           EffectController(duration: .5),
+          target: component,
           onComplete: onComplete,
         ),
       );
@@ -59,10 +73,11 @@ class PlayerStateBehavior extends Behavior<Player> {
 
   void fadeIn({VoidCallback? onComplete}) {
     final component = _stateMap[state];
-    if (component != null && component is HasPaint) {
+    if (component != null) {
       component.add(
         OpacityEffect.fadeIn(
           EffectController(duration: .5, startDelay: .8),
+          target: component,
           onComplete: onComplete,
         ),
       );
@@ -77,9 +92,7 @@ class PlayerStateBehavior extends Behavior<Player> {
         current.removeFromParent();
 
         if (_needResetStates.contains(_state)) {
-          if (current is SpriteAnimationComponent) {
-            current.animationTicker?.reset();
-          }
+          current.reset();
         }
       }
 
@@ -95,164 +108,72 @@ class PlayerStateBehavior extends Behavior<Player> {
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    final [
-      idleAnimation,
-      runningAnimation,
-      phoenixIdleAnimation,
-      phoenixRunningAnimation,
-      deathPitAnimation,
-      deathFaintAnimation,
-      jumpAnimation,
-      phoenixJumpAnimation,
-      phoenixDoubleJumpAnimation,
-    ] = await Future.wait(
-      [
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_dash_idle.png',
-          SpriteAnimationData.sequenced(
-            amount: 18,
-            stepTime: 0.042,
-            textureSize: Vector2.all(parent.gameRef.tileSize),
-          ),
-        ),
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_dash_run.png',
-          SpriteAnimationData.sequenced(
-            amount: 16,
-            stepTime: 0.042,
-            textureSize: Vector2.all(parent.gameRef.tileSize),
-          ),
-        ),
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_phoenixDash_idle.png',
-          SpriteAnimationData.sequenced(
-            amount: 18,
-            stepTime: 0.042,
-            textureSize: Vector2.all(parent.gameRef.tileSize),
-          ),
-        ),
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_phoenixDash_run.png',
-          SpriteAnimationData.sequenced(
-            amount: 16,
-            stepTime: 0.042,
-            textureSize: Vector2.all(parent.gameRef.tileSize),
-          ),
-        ),
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_dash_deathPit.png',
-          SpriteAnimationData.sequenced(
-            amount: 24,
-            stepTime: 0.042,
-            textureSize: Vector2.all(parent.gameRef.tileSize),
-            amountPerRow: 8,
-            loop: false,
-          ),
-        ),
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_dash_deathFaint.png',
-          SpriteAnimationData.sequenced(
-            amount: 24,
-            stepTime: 0.042,
-            textureSize: Vector2.all(parent.gameRef.tileSize),
-            amountPerRow: 8,
-            loop: false,
-          ),
-        ),
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_dash_jump.png',
-          SpriteAnimationData.sequenced(
-            amount: 16,
-            stepTime: 0.042,
-            textureSize: Vector2.all(parent.gameRef.tileSize),
-            loop: false,
-          ),
-        ),
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_phoenixDash_jump.png',
-          SpriteAnimationData.sequenced(
-            amount: 16,
-            stepTime: 0.042,
-            textureSize: Vector2(
-              parent.gameRef.tileSize,
-              parent.gameRef.tileSize * 2,
-            ),
-            amountPerRow: 8,
-            loop: false,
-          ),
-        ),
-        parent.gameRef.loadSpriteAnimation(
-          'anim/spritesheet_phoenixDash_doublejump.png',
-          SpriteAnimationData.sequenced(
-            amount: 16,
-            stepTime: 0.042,
-            textureSize: Vector2.all(parent.gameRef.tileSize),
-            loop: false,
-          ),
-        ),
-      ],
-    );
+    final entries = await Future.wait([
+      _loadStateEntry(DashState.idle, AvatarAnimation.idle),
+      _loadStateEntry(DashState.running, AvatarAnimation.run),
+      _loadStateEntry(
+        DashState.zoneFiveIdle,
+        AvatarAnimation.idle,
+        withZoneFiveGlow: true,
+      ),
+      _loadStateEntry(
+        DashState.zoneFiveRunning,
+        AvatarAnimation.run,
+        withZoneFiveGlow: true,
+      ),
+      _loadStateEntry(DashState.deathPit, AvatarAnimation.deathPit),
+      _loadStateEntry(DashState.deathFaint, AvatarAnimation.deathFaint),
+      _loadStateEntry(DashState.jump, AvatarAnimation.jump),
+      _loadStateEntry(
+        DashState.zoneFiveJump,
+        AvatarAnimation.jump,
+        withZoneFiveGlow: true,
+      ),
+      _loadStateEntry(
+        DashState.zoneFiveDoubleJump,
+        AvatarAnimation.doubleJump,
+        withZoneFiveGlow: true,
+      ),
+      _loadStateEntry(DashState.slide, AvatarAnimation.slide),
+      _loadStateEntry(
+        DashState.zoneFiveSlide,
+        AvatarAnimation.slide,
+        withZoneFiveGlow: true,
+      ),
+    ]);
 
-    final paint = Paint()..isAntiAlias = false;
-
-    final centerPosition = parent.size / 2 - Vector2(0, parent.size.y / 2);
-    _stateMap = {
-      DashState.idle: SpriteAnimationComponent(
-        animation: idleAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-      DashState.running: SpriteAnimationComponent(
-        animation: runningAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-      DashState.phoenixIdle: SpriteAnimationComponent(
-        animation: phoenixIdleAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-      DashState.phoenixRunning: SpriteAnimationComponent(
-        animation: phoenixRunningAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-      DashState.deathPit: SpriteAnimationComponent(
-        animation: deathPitAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-      DashState.deathFaint: SpriteAnimationComponent(
-        animation: deathFaintAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-      DashState.jump: SpriteAnimationComponent(
-        animation: jumpAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-      DashState.phoenixJump: SpriteAnimationComponent(
-        animation: phoenixJumpAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-      DashState.phoenixDoubleJump: SpriteAnimationComponent(
-        animation: phoenixDoubleJumpAnimation,
-        anchor: Anchor.center,
-        position: centerPosition.clone(),
-        paint: paint,
-      ),
-    };
+    _stateMap = Map.fromEntries(entries);
 
     state = DashState.idle;
+  }
+
+  Future<MapEntry<DashState, AvatarSpriteComponent>> _loadStateEntry(
+    DashState dashState,
+    AvatarAnimation animation, {
+    bool withZoneFiveGlow = false,
+  }) async {
+    final game = parent.gameRef;
+    final avatar = await AvatarSpriteComponent.load(
+      game: game,
+      animation: animation,
+      appearance: game.avatarAppearance,
+      size: Vector2.all(game.tileSize),
+    );
+    avatar.position = _avatarPosition(avatar.size);
+
+    if (withZoneFiveGlow) {
+      avatar.add(ZoneFiveGlowComponent(avatarSize: avatar.size));
+    }
+
+    return MapEntry(dashState, avatar);
+  }
+
+  Vector2 _avatarPosition(Vector2 avatarSize) {
+    final soleGap =
+        avatarSize.y * (avatarFrameSize - avatarSoleBottom) / avatarFrameSize;
+    return Vector2(
+      parent.size.x / 2,
+      parent.size.y - avatarSize.y / 2 + soleGap,
+    );
   }
 }

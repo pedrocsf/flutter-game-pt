@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flutter/widgets.dart';
-import 'package:super_dash/game/game.dart';
+import 'package:moovz_dash/game/game.dart';
 
 class PlayerControllerBehavior extends Behavior<Player> {
   @visibleForTesting
@@ -14,14 +14,14 @@ class PlayerControllerBehavior extends Behavior<Player> {
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    parent.gameRef.addInputListener(_handleInput);
+    parent.gameRef.addJumpListener(_handleInput);
   }
 
   @override
   void onRemove() {
     super.onRemove();
 
-    parent.gameRef.removeInputListener(_handleInput);
+    parent.gameRef.removeJumpListener(_handleInput);
   }
 
   void _handleInput() {
@@ -43,6 +43,10 @@ class PlayerControllerBehavior extends Behavior<Player> {
       return;
     }
 
+    if (parent.isSliding && !parent.slideBehavior.endSlide()) {
+      return;
+    }
+
     // If is walking, jump
     if (parent.walking && parent.isOnGround) {
       parent
@@ -55,7 +59,7 @@ class PlayerControllerBehavior extends Behavior<Player> {
     // If is walking and double jump is enabled, double jump
     if (parent.walking &&
         !parent.isOnGround &&
-        parent.hasGoldenFeather &&
+        parent.hasZoneFive &&
         !doubleJumpUsed) {
       parent
         ..doubleJumpEffects()
